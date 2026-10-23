@@ -1,0 +1,39 @@
+/* Session 8 : états manquants, tableaux et historique au style MES. */
+.parametre-manquant { border-left: 4px solid var(--alerte); background: var(--alerte-c); }
+.parametre-manquant > h2:first-child { background: var(--alerte-c); color: var(--alerte-texte); }
+.module-incomplet { background: var(--alerte-c); }
+.module-incomplet .etat-module { color: var(--alerte-texte); }
+.chronologie h3 { margin-top: 0; }
+.chronologie .evenements { position: relative; margin: 0; padding: 0 0 0 27px; list-style: none; }
+.chronologie .evenements::before { position: absolute; top: 6px; bottom: 8px; left: 8px; width: 2px; background: var(--trait-m); content: ''; }
+.chronologie .evenements li { position: relative; margin: 0 0 12px; padding: 8px 10px; border: 1px solid var(--trait); background: var(--blanc); }
+.chronologie .evenements li::before { position: absolute; top: 12px; left: -25px; width: 11px; height: 11px; border: 2px solid var(--action); background: var(--blanc); content: ''; }
+.chronologie .evenements li > p { margin: 0 0 8px; }
+.admin-identite { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+.admin-identite > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.admin-avatar { flex: none; display: inline-grid; place-items: center; width: 32px; height: 32px; background: var(--nuit-2); color: var(--blanc); font: 700 11px var(--police-chiffres); }
+.admin-objet-icone { flex: none; display: inline-grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--trait-m); background: var(--survol); color: var(--encre); }
+.admin-objet-icone .mes-icone { width: 17px; height: 17px; }
+.admin-referentiels .onglet { display: inline-flex; align-items: center; gap: 7px; min-height: 38px; height: auto; }
+.admin-referentiels .onglet .mes-icone { width: 15px; height: 15px; }
+.admin-barre-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; min-height: 40px; margin-bottom: 12px; }
+.admin-barre-actions .mes-case { margin: 0; }
+.admin-boutons.actions-ligne { gap: 6px; }
+.admin-boutons.actions-ligne .bouton-secondaire { min-height: 34px; height: auto; padding: 5px 9px; }
+.admin-boutons .mes-icone { width: 14px; height: 14px; }
+.admin-postes-liste .tableau-admin { table-layout: fixed; }
+.admin-postes-liste th:nth-child(1) { width: 86px; }
+.admin-postes-liste th:nth-child(3) { width: 104px; }
+.admin-postes-liste th:nth-child(4) { width: 92px; }
+.admin-postes-liste th:nth-child(5) { width: 96px; }
+.admin-postes-liste td { overflow-wrap: anywhere; }
+.admin-poste-choix { min-height: 32px; padding: 2px 5px; border: 0; background: transparent; color: var(--action); font-weight: 700; text-decoration: underline; }
+.admin-poste-choix:hover, .admin-poste-choix[aria-pressed='true'] { background: var(--selection); }
+.admin-detail-titre { display: flex; align-items: center; gap: 7px; }
+.admin-detail-titre .mes-icone { width: 16px; height: 16px; }
+.admin-liens { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border: 1px solid var(--trait); }
+.admin-liens li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; min-width: 0; padding: 7px 9px; border-bottom: 1px solid var(--trait-c); background: var(--blanc); }
+.admin-liens li:last-child { border-bottom: 0; }
+.admin-lien-texte { flex: 1 1 145px; display: grid; min-width: 0; line-height: 1.3; }
+.admin-lien-texte strong, .admin-lien-texte span { overflow-wrap: anywhere; }
+.admin-liens .admin-boutons { margin-left: auto; }

@@ -1,0 +1,27 @@
+/* Rattrapage (PAP-00) : cartes des fiches papier, comme `.fiches` de prototype/arrachid-mes.html. */
+.rattrapage { display: grid; gap: 12px; align-content: start; }
+.rattrapage-fiches { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.rattrapage-fiche { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 3px 12px; height: 100%; padding: 12px; border: 1px solid var(--trait-m); background: var(--blanc); color: var(--encre); text-decoration: none; }
+.rattrapage-fiche:hover { background: var(--selection); color: var(--encre); }
+.rattrapage-icone { position: relative; grid-row: span 3; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--trait); background: var(--entete-tableau); }
+.rattrapage-icone .mes-icone { width: 22px; height: 22px; color: var(--encre-titre); }
+.rattrapage-ordre { position: absolute; top: -7px; left: -7px; display: grid; place-items: center; width: 19px; height: 19px; background: var(--nuit-2); color: var(--blanc); font: 600 10.5px var(--police-chiffres); }
+.rattrapage-titre { font: 600 15px var(--police-titre); }
+.rattrapage-description { font-size: 12px; color: var(--encre-2); }
+.rattrapage-code { font-size: 11.5px; color: var(--encre-3); }
+
+/* Fiches papier PAP-01 à PAP-07 (Session 7) : la fiche à recopier, les fiches récentes à droite (dessous sous 1280 px). */
+.fiche-page { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 360px); gap: 12px; align-items: start; }
+@media (max-width: 1279.98px) { .fiche-page { grid-template-columns: minmax(0, 1fr); } }
+.fiche-principale, .fiche-annexe { display: grid; gap: 12px; min-width: 0; align-content: start; }
+.fiche-corps { display: grid; gap: 12px; }
+.fiche-partie { display: grid; gap: 8px; min-width: 0; }
+.fiche-partie + .fiche-partie { padding-top: 12px; border-top: 1px solid var(--trait-c); }
+.fiche-partie-titre { margin: 0; font: 600 12px var(--police-titre); letter-spacing: .04em; text-transform: uppercase; color: var(--encre-titre); }
+.fiche-champs { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px 12px; align-items: start; }
+.fiche-champs > .mes-case, .fiche-champs > .fiche-cases, .fiche-champs > .validation-pin { grid-column: 1 / -1; }
+.fiche-cases { display: grid; gap: 4px; }
+.fiche-lignes td { padding: 4px 6px; }
+.fiche-lignes .mes-saisie { width: 100%; min-width: 120px; }
+.fiche-retour { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+.fiche-retour .mes-icone { width: 16px; height: 16px; }

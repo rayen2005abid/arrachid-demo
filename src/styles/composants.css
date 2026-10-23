@@ -1,0 +1,224 @@
+/* Composants partagés de la refonte (prompt-ui-ux.md, Session 2) : une seule famille de panneaux, tableaux, champs,
+   étiquettes d'état et tiroirs, au style de prototype/arrachid-mes.html (T-86, T-164). Les écrans s'en servent par
+   les composants React de src/composants/ ; les classes `mes-` ne s'écrivent pas à la main dans les écrans.
+   Restes des anciennes familles (Session 9) : `.panneau` (base.css) pour la chronologie, la validation par PIN et les
+   cartes des paramètres ; `.champ` (formulaires.css) pour l'écran plein cadre de mise en service. reception.css
+   (.rec-*) est supprimée. */
+
+/* Texte lu par les lecteurs d'écran, invisible à l'écran */
+.visuellement-cache { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Icônes (SVG en ligne) : la taille vient du contexte */
+.mes-icone { flex: none; width: 16px; height: 16px; }
+
+/* Boutons : compléments de .bouton-principal et .bouton-secondaire (base.css), dont des tests sélectionnent le nom */
+.bouton-principal .mes-icone, .bouton-secondaire .mes-icone { width: 15px; height: 15px; }
+.bouton-danger { border-color: var(--erreur); color: var(--erreur-f); }
+.bouton-danger:hover:not(:disabled) { background: var(--erreur-c); }
+.bouton-petit { height: 28px; padding: 0 9px; font-size: 12px; }
+
+/* Panneau à bandeau */
+.mes-panneau { min-width: 0; background: var(--panneau); border: 1px solid var(--trait); }
+.mes-bandeau { display: flex; align-items: center; gap: 8px; min-height: 31px; padding: 0 10px; background: var(--bandeau); border-bottom: 1px solid var(--trait); }
+.mes-bandeau h2, .mes-bandeau h3 { display: flex; align-items: center; gap: 8px; min-width: 0; margin: 0; font: 600 12px/1.3 var(--police-titre); letter-spacing: .06em; text-transform: uppercase; color: var(--encre-titre); }
+.mes-bandeau .mes-icone { width: 15px; height: 15px; }
+.mes-bandeau-compte { font: 500 12px var(--police-chiffres); color: var(--encre-2); }
+.mes-bandeau-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-left: auto; padding: 3px 0; }
+.mes-corps { display: grid; gap: 12px; align-content: start; min-width: 0; padding: 12px; }
+.mes-corps-serre { gap: 0; padding: 0; }
+.mes-corps p { margin: 0; }
+
+/* Liste à gauche, détail à droite ; empilés sous 1024 px */
+.mes-liste-detail { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+.mes-liste-detail-etroite { grid-template-columns: minmax(0, 380px) minmax(0, 1fr); }
+.mes-pile { display: grid; gap: 12px; align-content: start; min-width: 0; }
+@media (max-width: 1023.98px) { .mes-liste-detail { grid-template-columns: minmax(0, 1fr); } }
+
+/* Tableaux de données */
+.mes-tableau { min-width: 0; overflow-x: auto; }
+.mes-tableau table { width: 100%; border-collapse: collapse; background: var(--blanc); }
+.mes-tableau .mes-legende { padding: 8px 8px 5px; background: var(--panneau); font: 600 13px var(--police-chiffres); color: var(--encre-titre); text-align: left; caption-side: top; }
+.mes-tableau th { padding: 6px 8px; background: var(--entete-tableau); border-bottom: 1px solid var(--trait); font: 600 11px var(--police-titre); letter-spacing: .05em; text-transform: uppercase; color: var(--encre-2); text-align: left; white-space: nowrap; }
+.mes-tableau td { padding: 7px 8px; border-bottom: 1px solid var(--trait-c); vertical-align: middle; }
+.mes-tableau .mes-nombre { font-family: var(--police-chiffres); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.mes-tableau tr.mes-cliquable { cursor: pointer; }
+.mes-tableau tr.mes-cliquable:hover td { background: var(--survol); }
+.mes-tableau tr.mes-cliquable:focus-visible { outline: 2px solid var(--action); outline-offset: -2px; }
+.mes-tableau tr[aria-selected='true'] td { background: var(--selection); }
+.mes-tableau tr[aria-selected='true'] td:first-child { box-shadow: inset 4px 0 0 var(--action); }
+
+/* État vide (et attente d'une lecture) */
+.mes-vide { margin: 0; padding: 22px 12px; text-align: center; color: var(--encre-3); }
+.mes-vide p { margin: 0; }
+.mes-vide > * + * { margin-top: 10px; }
+
+/* Étiquettes d'état : le texte d'abord, la couleur en plus */
+.mes-pastille { display: inline-flex; align-items: center; gap: 4px; height: 21px; padding: 0 7px; border: 1px solid; font: 600 11px var(--police-titre); letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; }
+.mes-pastille .mes-icone { width: 12px; height: 12px; }
+.mes-pastille-neutre { border-color: var(--trait); background: var(--survol); color: var(--encre-2); }
+.mes-pastille-action { border-color: var(--selection-f); background: var(--selection); color: var(--action-f); }
+.mes-pastille-alerte { border-color: var(--alerte-f); background: var(--alerte-c); color: var(--alerte-texte); }
+.mes-pastille-ok { border-color: var(--ok); background: var(--ok-c); color: var(--ok-f); }
+.mes-pastille-erreur { border-color: var(--erreur); background: var(--erreur-c); color: var(--erreur-f); }
+.mes-pastille-violet { border-color: var(--violet-t); background: var(--violet-c); color: var(--violet); }
+.mes-pastille-sombre { border-color: var(--nuit-f); background: var(--nuit-2); color: var(--blanc); }
+
+/* Compteurs (onglets, bandeaux). Fond vert foncé pour « ok » : le texte blanc reste lisible. */
+.mes-compteur { display: inline-grid; place-items: center; min-width: 20px; height: 18px; padding: 0 5px; background: var(--action); color: var(--blanc); font: 600 11px var(--police-chiffres); }
+.mes-compteur-alerte { background: var(--alerte); color: var(--encre); }
+.mes-compteur-erreur { background: var(--erreur); }
+.mes-compteur-ok { background: var(--ok-f); }
+
+/* Voyants carrés */
+.mes-lampe { display: inline-flex; align-items: center; gap: 6px; }
+.mes-lampe::before { content: ''; flex: none; width: 9px; height: 9px; border: 1px solid var(--trait-f); background: var(--trait); }
+.mes-lampe-ok::before { background: var(--ok); }
+.mes-lampe-alerte::before { background: var(--alerte); }
+.mes-lampe-erreur::before { background: var(--erreur); }
+
+/* Champs : étiquette en capitales, saisie de 34 px (44 px en densité tactile) */
+.mes-champ { display: grid; gap: 4px; align-content: start; min-width: 0; }
+.mes-etiquette { font: 600 11.5px/16px var(--police-titre); letter-spacing: .05em; text-transform: uppercase; color: var(--encre-2); }
+.mes-requis { margin-left: 3px; color: var(--erreur-f); }
+.mes-saisie { width: 100%; min-width: 0; height: 34px; padding: 0 9px; border: 1px solid var(--trait-m); background: var(--blanc); }
+.mes-saisie:focus { outline: 2px solid var(--action); outline-offset: -2px; }
+.mes-saisie[aria-invalid='true'] { border-color: var(--erreur); background: var(--erreur-c); }
+/* Saisie et contrôle collé à droite (Champ `suffixe`) : une seule ligne, même hauteur. */
+.mes-saisie-groupe { display: flex; min-width: 0; }
+.mes-saisie-groupe > .mes-saisie { flex: 1 1 auto; }
+.mes-saisie-chiffres { font-family: var(--police-chiffres); font-variant-numeric: tabular-nums; }
+.mes-saisie-grande { height: 46px; font: 600 22px var(--police-chiffres); text-align: right; }
+select.mes-saisie { padding-right: 4px; }
+textarea.mes-saisie { height: auto; min-height: 80px; padding: 8px 9px; }
+.mes-saisie-texte { font-family: var(--police-chiffres); }
+/* Groupe de cases ou de boutons radio (fieldset) et case à cocher libellée (Session 9) */
+.mes-groupe { display: grid; gap: 4px; min-width: 0; margin: 0; padding: 6px 10px 8px; border: 1px solid var(--trait-c); background: var(--blanc); }
+.mes-groupe > legend { padding: 0 4px; }
+.mes-case { display: inline-flex; align-items: center; gap: 8px; min-height: 28px; font-size: 12.5px; }
+.mes-case input { flex: none; width: 18px; height: 18px; margin: 0; accent-color: var(--action); cursor: pointer; }
+.mes-case:has(input:disabled) { color: var(--encre-2); }
+.mes-champ-aide { margin: 0; font-size: 12px; color: var(--encre-2); }
+.mes-champ-erreur { margin: 0; font-size: 12px; font-weight: 600; color: var(--erreur-f); }
+
+/* Notes : information, alerte, erreur, réussite */
+.mes-note { display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px; border: 1px solid var(--selection-f); border-left: 4px solid var(--action); background: var(--selection); color: var(--encre); }
+.mes-note > .mes-icone { margin-top: 1px; color: var(--action-f); }
+.mes-note-texte { display: grid; gap: 8px; flex: 1; min-width: 0; }
+.mes-note-texte p { margin: 0; }
+.mes-note-alerte { border-color: var(--alerte-f); background: var(--alerte-c); }
+.mes-note-alerte > .mes-icone { color: var(--alerte-texte); }
+/* EM-02 : modules indisponibles du poste, sous les onglets, au-dessus du contenu. */
+.mes-bandeau-modules { flex: none; padding: 8px 14px 0; background: var(--fond); }
+.mes-bandeau-modules .mes-note-texte p + p { margin-top: 4px; }
+.mes-note-erreur { border-color: var(--erreur); background: var(--erreur-c); }
+.mes-note-erreur > .mes-icone { color: var(--erreur-f); }
+.mes-note-ok { border-color: var(--ok); background: var(--ok-c); }
+.mes-note-ok > .mes-icone { color: var(--ok-f); }
+
+/* Chiffres clés : bande de valeurs, afficheur sombre */
+.mes-chiffres { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); margin: 0; border: 1px solid var(--trait-c); background: var(--blanc); }
+.mes-chiffre { display: grid; gap: 2px; align-content: start; min-width: 0; padding: 8px 10px; border-right: 1px solid var(--trait-c); }
+.mes-chiffre:last-child { border-right: 0; }
+.mes-chiffre dt { font: 600 11px var(--police-titre); letter-spacing: .05em; text-transform: uppercase; color: var(--encre-2); }
+.mes-chiffre dd { margin: 0; font: 600 15px var(--police-chiffres); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.mes-chiffre-texte dd { font-family: var(--police); }
+.mes-chiffre-unite { margin-left: 4px; font-size: 12px; font-weight: 500; color: var(--encre-3); }
+.mes-chiffre-fort { background: var(--selection); }
+.mes-chiffre-fort dd { font-size: 20px; color: var(--action-f); }
+.mes-chiffre-mauvais { background: var(--erreur-c); }
+.mes-chiffre-mauvais dd { color: var(--erreur-f); }
+.mes-chiffre-afficheur { background: var(--afficheur); border-right-color: var(--nuit-f); }
+.mes-chiffre-afficheur dt, .mes-chiffre-afficheur .mes-chiffre-unite { color: var(--nuit-texte-2); }
+.mes-chiffre-afficheur dd { font-size: 30px; color: var(--afficheur-chiffres); }
+
+/* Étapes d'un parcours (états donnés par le serveur) */
+.mes-etapes { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.mes-etape { flex: 1 1 90px; display: grid; gap: 2px; min-width: 0; padding: 6px 4px 0; border-top: 4px solid var(--trait-c); font-size: 11.5px; color: var(--encre-3); }
+.mes-etape-libelle { display: flex; align-items: center; gap: 5px; font: 600 12px var(--police-titre); letter-spacing: .03em; text-transform: uppercase; }
+.mes-etape .mes-icone { width: 13px; height: 13px; }
+.mes-etape-faite { border-top-color: var(--ok); color: var(--encre-2); }
+.mes-etape-faite .mes-etape-libelle { color: var(--ok-f); }
+.mes-etape-actuelle { border-top-color: var(--action); color: var(--action-f); }
+.mes-etape-bloquee { border-top-color: var(--alerte-f); }
+.mes-etape-bloquee .mes-etape-libelle { color: var(--alerte-texte); }
+
+/* Puces de filtre */
+.mes-puces { display: flex; flex-wrap: wrap; gap: 6px; }
+.mes-puce { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 1px solid var(--trait-m); background: var(--blanc); color: var(--encre); font: 600 12.5px var(--police-titre); }
+.mes-puce:hover { background: var(--survol); }
+.mes-puce[aria-pressed='true'] { border-color: var(--nuit-2); background: var(--nuit-2); color: var(--blanc); }
+.mes-puce-nombre { font: 500 11px var(--police-chiffres); opacity: .8; }
+
+/* Sous-onglets : liens vers des routes existantes */
+.mes-sous-onglets { display: flex; gap: 2px; min-width: 0; overflow-x: auto; scrollbar-width: thin; background: var(--tete); border-bottom: 1px solid var(--trait); }
+.mes-sous { flex: none; display: flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px; border-bottom: 3px solid transparent; color: var(--encre-2); font: 600 13.5px var(--police-titre); text-decoration: none; white-space: nowrap; }
+.mes-sous .mes-icone { width: 15px; height: 15px; }
+.mes-sous:hover { background: var(--survol); color: var(--encre); }
+.mes-sous[aria-current='page'] { border-bottom-color: var(--action); color: var(--encre); }
+.mes-sous-code { font: 500 10.5px var(--police-chiffres); color: var(--encre-3); }
+
+/* Choix exclusif en gros boutons (plage, niveau, ligne ; Session 5) */
+.mes-choix { display: flex; flex-wrap: wrap; gap: 6px; }
+.mes-choix-bouton { flex: 1 1 110px; display: flex; align-items: center; justify-content: center; gap: 7px; min-width: 0; min-height: 36px; padding: 0 10px; border: 1px solid var(--trait-m); background: var(--blanc); color: var(--encre); font: 600 13.5px var(--police-titre); }
+.mes-choix-bouton:hover:not(:disabled) { background: var(--survol); }
+.mes-choix-bouton[aria-checked='true'] { border: 2px solid var(--action); background: var(--selection); color: var(--action-f); }
+
+/* Cartes à choisir : cuve ou tampon de destination, opération de cuve (Session 5) */
+.mes-cartes-choix { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 6px; }
+.mes-carte-choix { display: grid; align-content: start; gap: 3px; min-width: 0; min-height: 60px; padding: 8px 10px; border: 1px solid var(--trait-m); border-left: 4px solid var(--trait-f); background: var(--blanc); color: var(--encre); font-size: 12.5px; text-align: left; }
+.mes-carte-choix:hover:not(:disabled) { background: var(--survol); }
+.mes-carte-choix[aria-checked='true'] { border-color: var(--action); border-left-color: var(--action); background: var(--selection); box-shadow: inset 0 0 0 1px var(--action); }
+.mes-carte-choix:disabled { opacity: 1; border-left-color: var(--trait); background: var(--survol); color: var(--encre-3); }
+.mes-carte-choix-titre { font: 600 15px var(--police-titre); color: var(--encre); }
+.mes-carte-choix > span { overflow-wrap: anywhere; color: var(--encre-2); }
+
+/* Afficheur d'une balance ou d'un analyseur : la valeur lue se tape dedans (Session 5) */
+.mes-afficheur { display: grid; gap: 4px; min-width: 0; padding: 10px 16px 12px; border: 1px solid var(--nuit-f); background: var(--afficheur); color: var(--nuit-texte-2); }
+.mes-afficheur-tete { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; font: 600 12px var(--police-titre); letter-spacing: .08em; text-transform: uppercase; }
+.mes-afficheur-source { flex: 1; font: 400 11.5px var(--police); letter-spacing: 0; text-align: right; text-transform: none; }
+.mes-afficheur-ligne { display: flex; align-items: baseline; gap: 12px; min-width: 0; }
+.mes-afficheur-ligne label { flex: none; font: 600 14px var(--police-titre); letter-spacing: .08em; text-transform: uppercase; }
+.mes-afficheur-ligne input { flex: 1; width: 100%; min-width: 0; padding: 0; border: 0; background: transparent; color: var(--afficheur-chiffres); caret-color: var(--afficheur-chiffres); font: 600 clamp(32px, 4.4vw, 52px)/1.1 var(--police-chiffres); text-align: right; }
+.mes-afficheur-ligne input::placeholder { color: var(--nuit-3); }
+.mes-afficheur-ligne input:focus-visible { outline: 1px dashed var(--nuit-texte-2); outline-offset: 4px; }
+.mes-afficheur-ligne input[aria-invalid='true'] { outline: 2px solid var(--erreur); outline-offset: 4px; }
+.mes-afficheur-unite { flex: none; font: 600 20px var(--police-chiffres); }
+.mes-afficheur-pied { margin: 2px 0 0; color: var(--afficheur-chiffres); font: 600 15px var(--police-chiffres); text-align: right; }
+
+/* Jauge de niveau : repère visuel, les chiffres du serveur font foi (Session 5) */
+.mes-jauge { position: relative; display: block; height: 7px; overflow: hidden; border: 1px solid var(--trait); background: var(--trait-c); }
+.mes-jauge-niveau { position: absolute; top: 0; bottom: 0; left: 0; background: var(--action); }
+.mes-jauge-verticale { width: 34px; height: 76px; border: 2px solid var(--trait-f); border-top-width: 3px; background: var(--tete); }
+.mes-jauge-verticale .mes-jauge-niveau { top: auto; right: 0; }
+.mes-jauge-extra_vierge .mes-jauge-niveau { background: var(--q-extra-vierge); }
+.mes-jauge-vierge .mes-jauge-niveau { background: var(--q-vierge); }
+.mes-jauge-lampante .mes-jauge-niveau { background: var(--q-lampante); }
+
+/* Tiroir (panneau latéral) et voile */
+.mes-voile { position: fixed; inset: 0; z-index: 20; background: var(--voile); }
+.mes-tiroir { position: fixed; top: 0; right: 0; bottom: 0; z-index: 21; display: flex; flex-direction: column; width: min(440px, 100%); background: var(--panneau); border-left: 1px solid var(--trait-f); box-shadow: -8px 0 24px var(--ombre); }
+.mes-tiroir:focus { outline: none; }
+.mes-tiroir-tete { flex: none; display: flex; align-items: center; gap: 9px; min-height: 46px; padding: 0 8px 0 14px; background: var(--nuit); color: var(--blanc); }
+.mes-tiroir-tete h2 { flex: 1; min-width: 0; margin: 0; font: 600 16px var(--police-titre); letter-spacing: .02em; }
+.mes-tiroir-fermer { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border: 0; background: none; color: var(--nuit-texte); }
+.mes-tiroir-fermer:hover { background: var(--nuit-3); color: var(--blanc); }
+.mes-tiroir-fermer .mes-icone { width: 18px; height: 18px; }
+.mes-tiroir-formulaire { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.mes-tiroir-corps { flex: 1; min-height: 0; overflow: auto; display: grid; gap: 12px; align-content: start; padding: 14px; }
+.mes-tiroir-pied { flex: none; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--trait); background: var(--tete); }
+@media (prefers-reduced-motion: no-preference) {
+  .mes-tiroir { animation: mes-glisse .16s ease-out; }
+  @keyframes mes-glisse { from { transform: translateX(24px); opacity: .6; } }
+}
+
+/* Densité tactile : postes laboratoire et production (PROMPT §6.20.1 ; attribut posé par la coquille, audit §5).
+   Une règle par composant, jamais par écran. Les autres postes gardent le style serré. */
+[data-densite='tactile'] .bouton-principal, [data-densite='tactile'] .bouton-secondaire { min-height: 44px; }
+[data-densite='tactile'] .mes-saisie { height: 44px; }
+[data-densite='tactile'] .mes-saisie-grande { height: 54px; }
+[data-densite='tactile'] .mes-puce { min-height: 44px; padding: 0 14px; }
+[data-densite='tactile'] .mes-sous { height: 44px; }
+[data-densite='tactile'] .mes-tableau td { height: 44px; }
+[data-densite='tactile'] .mes-tiroir-fermer { width: 44px; height: 44px; }
+[data-densite='tactile'] .mes-choix-bouton { min-height: 44px; }
+[data-densite='tactile'] .mes-case { min-height: 44px; }

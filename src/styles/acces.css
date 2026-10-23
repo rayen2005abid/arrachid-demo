@@ -1,0 +1,125 @@
+/* Écrans d'accès (poste non appairé, appairage, connexion) et pavé du PIN : cartes arrondies, pictogrammes,
+   pastilles colorées par poste / rôle et grandes cibles tactiles. Mêmes jetons que le reste de l'application. */
+
+.acces-icone { flex: none; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Carte */
+.ecran-acces {
+  border-radius: 20px; overflow: hidden; padding: 0 28px 28px; border-color: var(--trait);
+  box-shadow: 0 1px 2px var(--ombre-legere), 0 18px 40px -16px var(--ombre);
+  animation: acces-entree .3s ease-out both;
+}
+.page-connexion.ecran-acces, .page-centree.ecran-acces { width: min(100% - 32px, 560px); margin-top: 40px; }
+.page-appairage.ecran-acces { width: min(100% - 32px, 820px); margin-top: 40px; }
+section.ecran-acces > h1:first-child {
+  margin: 0 -28px 24px; padding: 22px 28px; background: linear-gradient(160deg, var(--nuit-2), var(--nuit));
+  border-bottom: 3px solid var(--logo-or); font: 700 26px/1.15 var(--police-titre); letter-spacing: 0; color: var(--blanc);
+}
+.ecran-acces .aide { margin: 0 0 14px; font-size: 16px; color: var(--encre-2); }
+@keyframes acces-entree { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Poste non appairé */
+.acces-vide-pictogramme { position: relative; display: grid; place-items: center; width: 132px; height: 132px; margin: 8px auto 20px; border-radius: 50%; background: var(--alerte-c); border: 2px dashed var(--alerte-f); color: var(--alerte-texte); }
+.acces-vide-alerte { position: absolute; top: 2px; right: 2px; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--alerte); color: var(--nuit); font: 700 20px var(--police); box-shadow: 0 0 0 5px var(--alerte-c); }
+.acces-vide { padding-top: 36px; }
+.acces-vide > h1 { margin: 0 0 24px; font: 700 26px/1.2 var(--police-titre); color: var(--encre-titre); }
+.acces-appairer { display: inline-flex; align-items: center; justify-content: center; min-height: 56px; padding: 0 28px; border-radius: 12px; background: var(--action); color: var(--blanc); font: 600 18px var(--police); text-decoration: none; box-shadow: 0 8px 18px -8px var(--action-f); }
+.acces-appairer:hover { background: var(--action-f); }
+
+/* Étapes numérotées de l'appairage */
+.page-appairage { counter-reset: etape; }
+.page-appairage > h2 { display: flex; align-items: center; gap: 12px; margin: 22px 0 12px; font: 600 13px var(--police); letter-spacing: .1em; text-transform: uppercase; color: var(--encre-2); }
+.page-appairage > h2::before { counter-increment: etape; content: counter(etape); display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--action); color: var(--blanc); font: 600 13px var(--police-chiffres); letter-spacing: 0; }
+
+/* Tuiles de choix : postes, administrateurs, utilisateurs */
+.ecran-acces .grille-noms { grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 12px; }
+.page-connexion .grille-noms { grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); text-align: left; }
+.ecran-acces .bouton-nom {
+  position: relative; flex-direction: row; align-items: center; justify-content: flex-start; gap: 14px; min-height: 80px; padding: 12px 14px;
+  border: 1.5px solid var(--trait); border-radius: 14px; background: var(--blanc);
+  transition: border-color .15s, box-shadow .15s, transform .12s, background .15s;
+}
+.ecran-acces .bouton-nom:hover { border-color: var(--action); box-shadow: 0 8px 18px -10px var(--ombre); background: var(--blanc); }
+.ecran-acces .bouton-nom:active { transform: scale(.985); }
+.ecran-acces .bouton-nom-choisi, .ecran-acces .bouton-nom-choisi:hover { border-color: var(--action); background: var(--selection); box-shadow: 0 0 0 3px rgba(31, 95, 139, .2); }
+.acces-texte { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.acces-texte strong { font: 600 17px/1.2 var(--police); color: var(--encre); }
+.ecran-acces .bouton-nom .acces-texte span { font-size: 13px; color: var(--encre-2); }
+.acces-pastille, .acces-avatar { display: grid; place-items: center; flex: none; width: 52px; height: 52px; border-radius: 14px; background: var(--nuit-2); color: var(--blanc); font: 700 18px var(--police-titre); box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .16); }
+.acces-avatar { width: 84px; height: 84px; margin: 4px auto 0; border-radius: 50%; font-size: 28px; box-shadow: 0 0 0 4px var(--blanc), 0 0 0 6px var(--trait), 0 10px 18px -8px var(--ombre); }
+.acces-reception { background: var(--g-reception); }
+.acces-laboratoire { background: var(--g-laboratoire); }
+.acces-production { background: var(--g-production); }
+.acces-bureau, .acces-responsable { background: var(--g-bureau); }
+.acces-proprietaire { background: var(--g-tableau); color: var(--nuit); }
+.acces-administrateur { background: var(--nuit-2); }
+.acces-operateur { background: var(--trait-f); }
+.acces-coche { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--trait); color: transparent; transition: .15s; }
+.bouton-nom-choisi .acces-coche { border-color: var(--action); background: var(--action); color: var(--blanc); }
+.page-connexion .nom-choisi { margin: 12px 0 4px; font: 700 26px var(--police-titre); }
+
+/* Pavé numérique du PIN */
+.pave { display: block; width: min(100%, 320px); margin: 8px auto 12px; }
+.pave:focus-visible { outline-offset: 8px; border-radius: 16px; }
+.pave-points { gap: 14px; margin-bottom: 18px; padding: 14px; border-radius: 14px; background: var(--afficheur); box-shadow: inset 0 2px 8px rgba(0, 0, 0, .45); }
+.pave-point { width: 18px; height: 18px; border: 2px solid var(--nuit-3); border-radius: 50%; transition: background .12s, border-color .12s, transform .12s; }
+.pave-point-plein { background: var(--afficheur-chiffres); border-color: var(--afficheur-chiffres); transform: scale(1.1); }
+.pave-grille { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.pave-touche { min-height: 68px; border: 1px solid var(--trait); border-bottom-width: 3px; border-radius: 14px; background: var(--tete); font-size: 26px; transition: background .1s, transform .08s; }
+.pave-touche:hover:not(:disabled) { background: var(--blanc); border-color: var(--trait-m); }
+.pave-touche:active:not(:disabled) { transform: translateY(2px); border-bottom-width: 1px; background: var(--selection); }
+.pave-touche:disabled { opacity: .45; }
+.pave-touche-secondaire { font: 600 13px var(--police); color: var(--encre-2); }
+.pave-touche-principale { border-color: var(--action-f); background: var(--action); font: 600 14px var(--police); }
+.pave-touche-principale:hover:not(:disabled) { background: var(--action-f); }
+.pave-touche-principale:disabled { background: var(--action-inactive); border-color: var(--action-inactive); color: var(--action-inactive-texte); opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) { .ecran-acces { animation: none; } .ecran-acces .bouton-nom, .pave-touche, .pave-point { transition: none; } }
+
+/* Poste fermé après « Quitter » : écran sombre « éteint », carte centrée, ce qui continue de tourner, grand Rouvrir. */
+.mes-ferme {
+  min-height: 100vh; display: grid; place-content: center; justify-items: center; gap: 20px; padding: 32px 16px;
+  background: radial-gradient(120% 80% at 50% 0%, var(--nuit-2), var(--nuit) 55%, var(--nuit-f)); color: var(--nuit-texte); text-align: center;
+}
+.mes-ferme-marque { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--nuit-texte-3); }
+.mes-ferme-carte {
+  position: relative; overflow: hidden; display: grid; justify-items: center; gap: 14px; width: min(100%, 460px); padding: 38px 28px 28px;
+  border: 1px solid var(--nuit-3); border-radius: 20px;
+  background: var(--nuit); box-shadow: 0 24px 60px -24px var(--noir);
+}
+.mes-ferme-carte::before { content: ''; position: absolute; inset: 0 0 auto; height: 4px; background: var(--logo-or); }
+.mes-ferme-pictogramme {
+  display: grid; place-items: center; width: 96px; height: 96px; margin-bottom: 6px; border-radius: 50%;
+  border: 2px solid var(--nuit-3); background: var(--nuit-2); color: var(--nuit-texte-3); box-shadow: 0 0 0 8px var(--nuit-f);
+}
+.mes-ferme-pictogramme .mes-icone { width: 44px; height: 44px; stroke-width: 2.2; }
+.mes-ferme h1 { margin: 0; font: 700 26px/1.2 var(--police-titre); color: var(--blanc); text-wrap: balance; }
+.mes-ferme-heure {
+  margin: 0; padding: 5px 14px; border: 1px solid var(--nuit-3); border-radius: 999px;
+  background: var(--nuit-f); color: var(--nuit-texte); font-size: 14px;
+}
+.mes-ferme-etats { display: grid; width: 100%; margin: 8px 0 4px; border: 1px solid var(--nuit-3); border-radius: 14px; overflow: hidden; text-align: left; }
+.mes-ferme-etats div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: var(--nuit-f); }
+.mes-ferme-etats div + div { border-top: 1px solid var(--nuit-3); }
+.mes-ferme-etats dt { color: var(--nuit-texte-2); font-size: 15px; }
+.mes-ferme-etats dd { display: flex; align-items: center; gap: 8px; margin: 0; white-space: nowrap; color: var(--blanc); font-weight: 600; font-size: 15px; }
+.mes-ferme-etats .mes-icone { width: 18px; height: 18px; color: var(--ok); }
+.mes-ferme-rouvrir {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 56px; margin-top: 6px;
+  border: 0; border-radius: 12px; background: var(--action); color: var(--blanc); font: 600 18px var(--police); cursor: pointer;
+  box-shadow: 0 10px 22px -10px var(--noir);
+}
+.mes-ferme-rouvrir .mes-icone { width: 20px; height: 20px; }
+.mes-ferme-rouvrir:hover { background: var(--action-f); }
+.mes-ferme-rouvrir:active { background: var(--action-survol); }
+.mes-ferme-rouvrir:focus-visible { outline: 3px solid var(--logo-or); outline-offset: 3px; }
+.mes-ferme-aide { margin: 0; color: var(--nuit-texte-2); font-size: 14px; }
+@media (max-width: 480px) {
+  .mes-ferme-carte { padding: 34px 18px 22px; }
+  .mes-ferme h1 { font-size: 23px; }
+  .mes-ferme-etats div { padding: 12px 14px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mes-ferme-carte { animation: acces-entree .35s ease-out both; }
+  .mes-ferme-rouvrir { transition: background .15s; }
+}

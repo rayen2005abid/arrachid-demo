@@ -1,0 +1,158 @@
+/* Module Production refait (prompt-ui-ux.md, Session 5) : Planification, Trituration (passages, pesées d'huile),
+   Remise d'huile, Rendement, Cuves (registre, détail, opérations) et Analyses d'huile, au style de
+   prototype/arrachid-mes.html. Panneaux, tableaux, champs, choix, cartes, afficheurs, jauges et tiroirs viennent des
+   composants partagés (composants.css) ; les cibles de 44 px viennent de la densité tactile de la coquille.
+   Cette feuille ne garde que ce qui est propre à ces écrans. Classes que des tests sélectionnent, posées par les écrans
+   sur les composants : .tableau-planification, .tableau-triturations, .tableau-cuves, .tableau-mouvements,
+   .cuves-qualites, .cuve-chiffres. */
+.prod-page { display: grid; gap: 12px; align-content: start; }
+.prod-formulaire { display: grid; gap: 12px; min-width: 0; }
+.prod-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px 12px; }
+.prod-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.prod-actions-ligne { flex-wrap: nowrap; }
+.prod-discret { margin: 0; font-size: 12.5px; color: var(--encre-2); }
+.prod-chiffres-texte { font-family: var(--police-chiffres); }
+
+/* Lignes de trituration : ce qui tourne sur chaque ligne et ce qui y est planifié (PRD-01) */
+.prod-lignes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px; padding: 10px; }
+.prod-ligne { display: grid; gap: 6px; align-content: start; min-width: 0; padding: 10px 12px; border: 1px solid var(--trait-m); border-left: 6px solid var(--trait); background: var(--blanc); }
+.prod-ligne-active { border-left-color: var(--ok); }
+.prod-ligne-tete { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.prod-ligne-tete h3 { margin: 0; font: 600 16px var(--police-titre); }
+.prod-ligne-tete .mes-pastille { margin-left: auto; }
+.prod-ligne p { margin: 0; }
+.prod-ligne-chiffres { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: var(--encre-2); }
+.prod-ligne-chiffres strong { font-family: var(--police-chiffres); color: var(--encre); }
+
+/* Cartes d'une liste à choisir : lots à triturer (plusieurs), passages en cours (un seul) */
+.prod-cartes { display: grid; gap: 6px; padding: 8px; }
+.prod-carte { display: grid; gap: 3px; width: 100%; min-width: 0; min-height: 52px; padding: 8px 10px; border: 1px solid var(--trait-m); border-left: 5px solid var(--action); background: var(--blanc); color: var(--encre); text-align: left; }
+.prod-carte-tampon { border-left-color: var(--violet-t); }
+.prod-carte:hover:not(:disabled) { background: var(--survol); }
+.prod-carte[aria-pressed='true'], .prod-carte[aria-current='true'] { background: var(--selection); outline: 2px solid var(--action); outline-offset: -2px; }
+/* Un lot que le serveur écarte reste lisible : la raison est écrite dessous. */
+.prod-carte:disabled { opacity: 1; border-left-color: var(--trait); background: var(--survol); color: var(--encre-2); }
+.prod-carte-tete { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.prod-carte-tete .mes-pastille { margin-left: auto; }
+.prod-carte-numero { font: 600 13px var(--police-chiffres); }
+.prod-carte-nom { flex: 1; min-width: 0; overflow: hidden; font: 600 15px var(--police-titre); text-overflow: ellipsis; white-space: nowrap; }
+.prod-carte-detail { font-size: 12px; color: var(--encre-2); }
+.prod-carte-ecart { font-size: 12px; font-weight: 600; color: var(--erreur-f); }
+
+/* Lots d'un passage dans un tableau */
+.prod-lots { display: grid; gap: 2px; }
+.prod-lots .aide { font-size: 12px; }
+
+/* Cuve de destination (PRD-02) : cartes des cuves proposées, avec acidité, écart et acidité après le contenant */
+.prod-cuve-titre { display: flex; align-items: center; gap: 8px; }
+.prod-cuve-titre .mes-pastille { margin-left: auto; font-family: var(--police); }
+.prod-cuve-apres { font-weight: 600; color: var(--encre); }
+.mes-carte-choix > span.prod-cuve-manque { font-weight: 600; color: var(--erreur-f); }
+
+/* Cuves de même qualité refusées pour ce contenant : chiffres, raisons, dérogation possible */
+.prod-refusees { display: grid; gap: 4px; }
+.prod-refusees h3 { margin: 0; }
+.prod-refusees > ul { display: grid; margin: 0; padding: 0; list-style: none; border: 1px solid var(--trait-c); border-left: 4px solid var(--alerte); background: var(--blanc); }
+.prod-refusees > ul > li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-height: 44px; padding: 6px 10px; border-bottom: 1px solid var(--trait-c); }
+.prod-refusees > ul > li:last-child { border-bottom: 0; }
+.prod-refusee-tete { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.prod-refusee-tete strong { font: 600 14px var(--police-chiffres); color: var(--encre); }
+.prod-refusee-tete span { font-size: 12.5px; color: var(--encre-2); }
+.prod-raisons { flex: 1 1 220px; margin: 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--alerte-texte); }
+.prod-refusees .bouton-secondaire { margin-left: auto; }
+
+/* Autres cuves (autre qualité, non proposées, désactivées) : repliées, en plages de codes */
+.prod-autres { border: 1px solid var(--trait-c); background: var(--blanc); }
+.prod-autres summary { display: flex; align-items: center; min-height: 36px; padding: 0 10px; font: 600 12.5px var(--police-titre); color: var(--encre-2); cursor: pointer; }
+.prod-autres summary::before { content: '▸'; width: 14px; color: var(--encre-3); }
+.prod-autres[open] summary::before { content: '▾'; }
+.prod-autres summary:hover { background: var(--survol); }
+.prod-non-proposees { display: grid; gap: 4px; padding: 4px 10px 8px; border-bottom: 1px solid var(--trait-c); }
+.prod-autres dl { display: grid; gap: 6px; margin: 0; padding: 4px 10px 10px; }
+.prod-autres dl div { display: grid; gap: 1px; }
+.prod-autres dt { font-size: 12px; color: var(--encre-3); }
+.prod-autres dd { margin: 0; font: 500 12.5px var(--police-chiffres); color: var(--encre); overflow-wrap: anywhere; }
+
+/* Ce que F8 enregistre, juste avant de le faire */
+.prod-apercu { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 6px 12px; border: 1px solid var(--selection-f); background: var(--selection); }
+.prod-apercu .touche-f8 { flex: none; color: var(--blanc); }
+.prod-apercu p { display: grid; gap: 1px; margin: 0; }
+.prod-apercu strong { font: 600 14px var(--police-titre); color: var(--encre); }
+.prod-apercu span { font-size: 12.5px; color: var(--encre-2); }
+
+/* Lignes remplacées ou annulées : visibles, hors des totaux */
+.mes-tableau tr.prod-remplacee td { color: var(--encre-3); text-decoration: line-through; }
+.mes-tableau tr.prod-remplacee td .mes-pastille { text-decoration: none; }
+.mes-tableau tr.prod-corrige td { background: var(--survol); color: var(--encre-3); }
+.prod-entree { color: var(--ok-f); }
+.prod-sortie { color: var(--erreur-f); }
+
+/* Jauge du rendement (PRD-05) : la tolérance autour de la référence, et le rendement réel ; repères seulement */
+.prod-jauge-rendement { position: relative; height: 54px; margin: 20px 10px 6px; border-bottom: 2px solid var(--encre-2); }
+.prod-jauge-bande { position: absolute; top: 16px; bottom: 0; border: 1px dashed var(--ok); background: var(--ok-c); }
+.prod-jauge-repere { position: absolute; bottom: -2px; width: 0; height: 46px; border-left: 3px solid var(--action); }
+.prod-jauge-repere span { position: absolute; top: -19px; left: 0; transform: translateX(-50%); font: 600 11.5px var(--police-titre); letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; color: var(--action-f); }
+.prod-jauge-reel-ok { border-left-color: var(--ok-f); }
+.prod-jauge-reel-ok span { color: var(--ok-f); }
+.prod-jauge-reel-alerte { border-left-color: var(--alerte-f); }
+.prod-jauge-reel-alerte span { color: var(--alerte-texte); }
+.prod-jauge-reel-erreur { border-left-color: var(--erreur); }
+.prod-jauge-reel-erreur span { color: var(--erreur-f); }
+
+/* Cave à huile (CUV-01, d'après prototype/prototype-huilerie-v3.html) : cuves dessinées par rangée, posées sur un sol
+   hachuré. Une rangée trop longue passe à la ligne : chaque cuve porte son morceau de sol, la page ne défile pas de côté. */
+.cave { padding: 12px 14px 4px; background: linear-gradient(180deg, var(--panneau), var(--cave-sol)); }
+.cave-legende { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 14px; padding: 0; list-style: none; font-size: 12px; color: var(--encre-2); }
+.cave-legende li { display: flex; align-items: center; gap: 6px; }
+.cave-echantillon { display: inline-block; flex: none; width: 12px; height: 12px; border: 1px solid var(--trait); background: var(--cuve-corps); }
+.cave-rangee + .cave-rangee { margin-top: 18px; }
+.cave-rangee-titre { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; font-weight: 400; }
+.cave-rangee-nom { font: 700 11px var(--police-titre); letter-spacing: .14em; text-transform: uppercase; color: var(--encre-2); }
+.cave-rangee-trait { flex: 1; height: 1px; background: var(--trait); }
+.cave-rangee-total { font: 500 11.5px var(--police-chiffres); color: var(--encre-3); white-space: nowrap; }
+.cave-cuves { display: flex; flex-wrap: wrap; align-items: flex-end; margin: 0; padding: 0; list-style: none; }
+.cave-cuves li { position: relative; display: flex; align-items: flex-end; margin-bottom: 14px; padding: 0 5px; border-bottom: 3px solid var(--nuit-2); }
+.cave-cuves li::after { content: ''; position: absolute; top: 100%; right: 0; left: 0; height: 11px; margin-top: 3px; background: repeating-linear-gradient(-45deg, var(--cave-hachure) 0 1px, transparent 1px 6px); }
+.cave-cuve { position: relative; display: flex; flex-direction: column; align-items: center; min-width: 48px; padding: 9px 2px 4px; border: 0; background: none; color: var(--encre); }
+.cave-cuve-corps { position: relative; display: block; width: var(--largeur); height: var(--hauteur); overflow: hidden; border: 1.5px solid var(--trait); border-radius: 7px 7px 3px 3px; background: var(--cuve-corps); box-shadow: inset -6px 0 12px var(--cuve-ombre), inset 5px 0 9px var(--cuve-reflet); }
+.cave-cuve-niveau { position: absolute; right: 0; bottom: 0; left: 0; display: block; }
+.cave-cuve-niveau::after { content: ''; position: absolute; top: 0; right: 0; left: 0; height: 2px; background: var(--cuve-reflet); }
+.cave-cuve-pourcent { position: absolute; bottom: 3px; left: 50%; padding: 0 2px; transform: translateX(-50%); background: var(--cuve-etiquette); font: 700 9.5px var(--police-chiffres); color: var(--encre); white-space: nowrap; }
+.cave-cuve-pieds { display: block; width: calc(var(--largeur) - 10px); height: 5px; background: var(--trait-m); }
+.cave-cuve-code { margin-top: 5px; font: 700 12px var(--police-chiffres); }
+.cave-cuve-stock { font: 500 10.5px var(--police-chiffres); color: var(--encre-3); white-space: nowrap; }
+.cave-cuve:hover .cave-cuve-corps { border-color: var(--action); }
+.cave-cuve:focus-visible { outline: 2px solid var(--action); outline-offset: 2px; }
+.cave-cuve[aria-pressed='true'] .cave-cuve-corps { border-color: var(--nuit); box-shadow: 0 0 0 2px var(--action), inset -6px 0 12px var(--cuve-ombre); }
+.cave-cuve[aria-pressed='true'] .cave-cuve-code { color: var(--action-f); }
+.cave-cuve-alarme { position: absolute; z-index: 1; top: 2px; right: 0; display: flex; align-items: center; justify-content: center; width: 16px; height: 16px; border: 2px solid var(--panneau); border-radius: 50%; background: var(--erreur); color: var(--blanc); font: 700 9px var(--police-chiffres); }
+.cave-niveau-extra_vierge { background: linear-gradient(180deg, var(--q-extra-vierge-c), var(--q-extra-vierge)); }
+.cave-niveau-vierge { background: linear-gradient(180deg, var(--q-vierge-c), var(--q-vierge)); }
+.cave-niveau-lampante { background: linear-gradient(180deg, var(--q-lampante-c), var(--q-lampante)); }
+.cave-niveau-attente { background: linear-gradient(180deg, var(--q-attente-c), var(--q-attente)); }
+.cave-choisie { display: grid; gap: 10px; }
+.cave-choisie .prod-discret { margin: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .cave-cuve-corps { transition: border-color .14s, box-shadow .14s; }
+  .cave-cuve-niveau { transition: height .3s ease; }
+}
+
+/* Chiffres d'une cuve (CUV-02) et registre */
+.cuve-code { font: 700 15px var(--police-chiffres); letter-spacing: .02em; color: var(--encre); }
+.cuve-disponible { font-weight: 600; }
+.cuve-detail { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: start; }
+.cuve-detail .mes-jauge-verticale { width: 46px; height: 108px; }
+@media (max-width: 599.98px) { .cuve-detail { grid-template-columns: minmax(0, 1fr); } }
+.cuve-pastille { display: inline-block; flex: none; width: 10px; height: 10px; margin-right: 5px; border: 1px solid var(--trait-f); vertical-align: -1px; }
+.cuve-pastille-extra_vierge { background: var(--q-extra-vierge); }
+.cuve-pastille-vierge { background: var(--q-vierge); }
+.cuve-pastille-lampante { background: var(--q-lampante); }
+/* Jauge de remplissage dans le registre et le détail : petite cuve remplie par le bas, simple repère ; le chiffre du
+   serveur fait foi. */
+.jauge-cuve { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.jauge-cuve-barre { position: relative; display: inline-block; flex: none; width: 22px; height: 30px; overflow: hidden; border: 2px solid var(--trait-m); border-radius: 4px 4px 6px 6px; background: var(--blanc); }
+.jauge-cuve-niveau { position: absolute; right: 0; bottom: 0; left: 0; display: block; background: var(--action); }
+.jauge-cuve-extra_vierge .jauge-cuve-niveau { background: var(--q-extra-vierge); }
+.jauge-cuve-vierge .jauge-cuve-niveau { background: var(--q-vierge); }
+.jauge-cuve-lampante .jauge-cuve-niveau { background: var(--q-lampante); }
+.prod-pied { padding: 8px 12px; }

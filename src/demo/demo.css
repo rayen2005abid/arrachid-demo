@@ -1,0 +1,14 @@
+.demo-bandeau { display:flex; gap:12px; justify-content:space-between; align-items:center; padding:8px 16px; background:var(--selection); color:var(--encre); border-bottom:1px solid var(--action); font-size:12px; flex-wrap:wrap; }
+.demo-bandeau>div { display:flex; gap:8px; }
+.demo-bandeau button { border:1px solid var(--action); background:var(--panneau); color:var(--action); padding:6px 10px; cursor:pointer; font:inherit; }
+.demo-voile { position:fixed; inset:0; z-index:2000; background:var(--nuit); display:grid; place-items:center; padding:20px; }
+.demo-guide { background:var(--panneau); color:var(--encre); padding:28px; width:min(720px,100%); max-height:90vh; overflow:auto; border:1px solid var(--trait); line-height:1.6; }
+.demo-guide h1 { margin-top:0; }
+.demo-guide a { color:var(--action); }
+.demo-guide li { margin-block:10px; }
+.demo-document { padding:30px; max-width:1100px; margin:auto; }
+#racine { display:flex; flex-direction:column; height:100dvh; }
+.demo-bandeau { flex:none; }
+.mes { flex:1; min-height:0; height:auto; }
+.barre-etat { justify-content:space-between; gap:12px; overflow-x:auto; padding-inline:12px; }
+@media print { .demo-bandeau { display:none; } }

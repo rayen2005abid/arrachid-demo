@@ -1,0 +1,46 @@
+/* Champs, tableaux et étiquettes d'état au style MES (T-86), communs à tous les écrans. */
+.champ { display: flex; flex-direction: column; gap: 4px; margin: 0 0 10px; max-width: 30rem; text-align: left; }
+.champ input, .champ select, .champ textarea { height: 38px; padding: 0 10px; border: 1px solid var(--trait-f); background: var(--blanc); }
+.champ textarea { height: auto; min-height: 80px; padding: 8px 10px; font-family: var(--police-chiffres); }
+.champ input:focus, .champ select:focus, .champ textarea:focus { outline: 2px solid var(--action); outline-offset: -2px; }
+.champ input[aria-invalid='true'], .champ select[aria-invalid='true'] { border-color: var(--erreur); background: var(--erreur-c); }
+.champ .aide { margin: 0; font-size: 12px; }
+.page-formulaire fieldset { margin: 10px 0; padding: 8px 12px; border: 1px solid var(--trait); }
+.page-formulaire legend { font: 600 12px var(--police-titre); letter-spacing: .05em; text-transform: uppercase; color: var(--encre-2); }
+.carte-parametre code, .versions code { font-family: var(--police-chiffres); }
+
+/* Liste des modules (données manquantes) */
+.liste-modules { margin: 0; padding: 0; list-style: none; border: 1px solid var(--trait); background: var(--panneau); }
+.module { padding: 8px 10px; border-bottom: 1px solid var(--trait-c); border-left: 4px solid var(--ok); }
+.module p { margin: 3px 0 0; }
+.module-incomplet { border-left-color: var(--alerte); }
+.module-incomplet .etat-module { color: var(--erreur-f); font-weight: 600; }
+.module-pret .etat-module { color: var(--ok-f); font-weight: 600; }
+
+/* Tableaux de l'administration : toujours dans un `.mes-tableau` (composants.css), qui leur donne l'en-tête, les
+   traits et les cellules ; ici seulement des lignes de 32 px au moins et le survol (Session 9). */
+.tableau-admin td { height: 32px; }
+.tableau-admin tbody tr:hover { background: var(--survol); }
+.tableau-admin .nombre { font-family: var(--police-chiffres); text-align: right; }
+.ligne-inactive { color: var(--encre-3); }
+.actions-ligne { display: flex; flex-wrap: wrap; gap: 4px; }
+.actions-ligne .bouton-secondaire { height: 28px; padding: 0 8px; font-size: 12px; }
+
+/* Onglets internes à un écran (segments) */
+.onglets { display: inline-flex; flex-wrap: wrap; margin: 0 0 12px; border: 1px solid var(--trait-f); }
+.onglet { height: 34px; padding: 0 14px; border: 0; border-right: 1px solid var(--trait); background: var(--survol); color: var(--encre); font: 600 13px var(--police-titre); letter-spacing: .03em; }
+.onglet:last-child { border-right: 0; }
+.onglet[aria-selected='true'], .onglet[aria-pressed='true'] { background: var(--nuit-2); color: var(--blanc); }
+
+.filtres { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-bottom: 12px; }
+.filtres .champ { margin: 0; }
+.texte-arabe { font-family: var(--police-arabe); text-align: right; max-width: 30rem; }
+.fiche { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 0; margin: 0; border: 1px solid var(--trait-c); background: var(--blanc); }
+.fiche > div { padding: 6px 10px; border-bottom: 1px solid var(--trait-c); border-right: 1px solid var(--trait-c); }
+.fiche dt { font: 600 11px var(--police-titre); letter-spacing: .05em; text-transform: uppercase; color: var(--encre-2); }
+.fiche dd { margin: 2px 0 0; font-weight: 600; }
+.evenements { padding-left: 18px; }
+.evenements li { margin: 10px 0; }
+.evenements table { border-collapse: collapse; }
+.evenements td, .evenements th { padding: 2px 12px 2px 0; text-align: left; }
+.sous-section { margin: 10px 0; padding: 8px 12px; border: 1px solid var(--trait); background: var(--blanc); }

@@ -1,0 +1,8 @@
+/* Tickets (T2.4 ; refonte UI, Session 2) : recherche par numéro et aperçu. Le reste vient des composants partagés. */
+.recherche-ticket { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; }
+.recherche-ticket .mes-champ { flex: 1 1 200px; }
+/* Bouton à la hauteur de la saisie : étiquette de 16 px et écart de 4 px au-dessus d'elle. */
+.recherche-ticket > .bouton-secondaire { margin-top: 20px; }
+/* Aperçu : cadre à hauteur bornée qui défile seul (les deux copies sont l'une sous l'autre) ; le ticket garde ses proportions. */
+.apercu-cadre { max-height: min(60vh, 560px); overflow: auto; border: 1px solid var(--trait); background: var(--papier); padding: 10px; overscroll-behavior: contain; }
+.apercu-ticket { display: block; width: 100%; max-width: 360px; height: auto; margin: 0 auto; border: 1px solid var(--trait); background: var(--blanc); box-shadow: 0 1px 4px var(--ombre); }

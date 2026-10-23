@@ -1,0 +1,205 @@
+/* Coquille de l'application au style « MES » (T-86) : barre du haut, onglets, en-tête d'écran,
+   touches de fonction et barre d'état. Les écrans n'utilisent que les classes ci-dessous. */
+* { box-sizing: border-box; }
+html, body, #racine { height: 100%; }
+body { margin: 0; background: var(--fond); color: var(--encre); font: 13px/1.4 var(--police); }
+h1, h2, h3 { font-family: var(--police-titre); font-weight: 600; }
+h1 { font-size: 20px; margin: 0; }
+h2 { font-size: 15px; margin: 14px 0 8px; }
+h3 { font-size: 14px; margin: 10px 0 6px; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .45; }
+:focus-visible { outline: 2px solid var(--action); outline-offset: 1px; }
+/* Sur les fonds sombres, le bleu d'action ne se voit pas (2,4:1) : contour clair (Session 9, T-194). */
+.mes-barre :focus-visible, .mes-modules :focus-visible, .mes-tiroir-tete :focus-visible, .page-centree > h1 :focus-visible { outline-color: var(--nuit-texte); }
+/* « Aller au contenu » : premier arrêt de Tab, visible seulement quand il a le focus. */
+.lien-evitement { position: absolute; left: 8px; top: -100px; z-index: 30; padding: 8px 14px; background: var(--blanc); color: var(--action-f); border: 2px solid var(--action); font-weight: 600; }
+.lien-evitement:focus { top: 4px; }
+.mes-contenu:focus { outline: none; }
+a { color: var(--action); }
+a:hover { color: var(--action-survol); }
+.aide { color: var(--encre-2); }
+.nombre, .chiffres, code { font-family: var(--police-chiffres); font-variant-numeric: tabular-nums; }
+
+/* ── Coquille ─────────────────────────────────────────────────────────── */
+/* `position: relative; overflow: hidden` : les éléments absolus du contenu (texte caché, etc.) ne doivent pas agrandir le document,
+   sinon la fenêtre défile et toute l'application glisse vers le haut. */
+.mes { position: relative; display: flex; flex-direction: column; height: 100vh; min-width: 0; overflow: hidden; }
+
+.mes-barre { flex: none; display: flex; align-items: stretch; height: 40px; background: var(--nuit); color: var(--nuit-texte); border-bottom: 1px solid var(--noir); white-space: nowrap; }
+.mes-marque { flex: none; display: flex; align-items: center; gap: 10px; padding: 0 16px 0 12px; background: var(--nuit-f); border-right: 1px solid var(--noir); color: inherit; text-decoration: none; }
+.mes-logo { width: 20px; height: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.mes-logo span:nth-child(1) { background: var(--logo-or); }
+.mes-logo span:nth-child(2), .mes-logo span:nth-child(3) { background: var(--logo-gris); }
+.mes-logo span:nth-child(4) { background: var(--nuit-texte); }
+.mes-nom { font: 700 15px var(--police-titre); letter-spacing: .1em; }
+.mes-nom span { margin-right: 6px; color: var(--nuit-texte-2); font-weight: 500; }
+.mes-infos { flex: 1; min-width: 0; display: flex; align-items: center; gap: 20px; padding: 0 16px; overflow: hidden; font-size: 12px; color: var(--nuit-texte-3); }
+/* Étroit : chaque information se raccourcit (…) au lieu d'être coupée net ; sous 1024 px, « Huilerie · type de poste »
+   s'efface, le poste nommé à sa droite le dit déjà (Session 9 : « Poste Bur » coupé à 768 px). */
+.mes-infos > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 1023.98px) { .mes-infos > span:first-child { display: none; } .mes-infos { gap: 14px; padding: 0 12px; } }
+.mes-infos strong { color: var(--blanc); font-weight: 600; }
+.mes-infos .chiffres { color: var(--blanc); }
+.mes-utilisateur { flex: none; display: flex; flex-direction: column; justify-content: center; padding: 0 14px; border-left: 1px solid var(--noir); line-height: 1.2; }
+.mes-utilisateur strong { font-size: 12px; color: var(--blanc); }
+.mes-utilisateur span { font-size: 11px; color: var(--nuit-texte-2); }
+.mes-horloge { flex: none; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; padding: 0 14px; border-left: 1px solid var(--noir); font-family: var(--police-chiffres); line-height: 1.15; }
+.mes-horloge strong { font-size: 14px; color: var(--blanc); font-weight: 600; }
+.mes-horloge span { font-size: 10.5px; color: var(--nuit-texte-2); }
+
+/* Barres de navigation (T-164) : elles défilent quand elles débordent, avec une barre de défilement visible, et ne
+   passent jamais sur deux lignes. `flex: none` : une zone qui défile ne doit pas être écrasée par le contenu. */
+.mes-modules, .mes-onglets, .mes > .mes-sous-onglets { flex: none; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+
+/* Modules (seulement quand le rôle en voit plusieurs) : la couleur du module souligne celui qui est ouvert. */
+.mes-modules { display: flex; align-items: stretch; height: 34px; background: var(--nuit-2); }
+.mes-module { flex: none; display: flex; align-items: center; gap: 8px; padding: 0 14px; border-bottom: 3px solid transparent; color: var(--nuit-texte-2); font: 600 12px var(--police-titre); letter-spacing: .07em; text-transform: uppercase; text-decoration: none; white-space: nowrap; }
+.mes-module .mes-icone { width: 15px; height: 15px; color: var(--c); }
+.mes-module:hover { background: var(--nuit-3); color: var(--blanc); }
+.mes-module[aria-current='true'] { background: var(--nuit-3); border-bottom-color: var(--c); color: var(--blanc); }
+.mes-module:focus-visible { outline-offset: -2px; }
+[data-module='tableau'] { --c: var(--g-tableau); }
+[data-module='reception'] { --c: var(--g-reception); }
+[data-module='laboratoire'] { --c: var(--g-laboratoire); }
+[data-module='production'] { --c: var(--g-production); }
+[data-module='bureau'] { --c: var(--g-bureau); }
+[data-module='administration'] { --c: var(--g-administration); }
+
+/* Onglets du module affiché : icône, libellé, compteur ou voyant */
+.mes-onglets { display: flex; align-items: flex-end; gap: 3px; padding: 6px 10px 0; background: var(--onglets); border-bottom: 1px solid var(--onglets-trait); }
+.mes-onglet { flex: none; display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border: 1px solid var(--onglet-trait); border-bottom: 0; border-top: 3px solid transparent; background: var(--onglet); color: var(--onglet-encre); font: 500 14px var(--police-titre); letter-spacing: .02em; text-decoration: none; white-space: nowrap; }
+.mes-onglet .mes-icone { width: 17px; height: 17px; color: var(--encre-3); }
+.mes-onglet:hover { background: var(--survol); color: var(--encre); }
+.mes-onglet[aria-current='true'] { height: 37px; margin-bottom: -1px; border-color: var(--onglets-trait); border-top-color: var(--action); background: var(--tete); color: var(--nuit-f); font-weight: 600; }
+.mes-onglet[aria-current='true'] .mes-icone { color: var(--action); }
+.mes-onglet:focus-visible { outline-offset: -2px; }
+/* Tablette en hauteur (768 px) : onglets un peu plus serrés, pour que les six onglets de l'administration du
+   propriétaire tiennent sans défiler (86 px de trop au départ de la Session 9). La barre défile toujours au besoin. */
+@media (max-width: 899.98px) {
+  .mes-onglets { gap: 2px; padding: 6px 6px 0; }
+  .mes-onglet { gap: 6px; padding: 0 9px; font-size: 13.5px; }
+}
+.mes-onglet-texte { font: 500 11.5px var(--police-chiffres); color: var(--encre-2); }
+
+.mes-contenu { flex: 1; min-height: 0; overflow: auto; }
+.mes-page { padding: 12px 14px 16px; }
+
+/* En-tête d'écran : code, titre, sous-titre, message, action principale F8 */
+/* Collé en haut de la zone qui défile : titre et action principale restent visibles. */
+.entete-ecran { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; min-height: 50px; padding: 7px 14px; background: var(--tete); border-bottom: 1px solid var(--trait); }
+.entete-ecran-code { padding: 2px 7px; background: var(--nuit-2); color: var(--nuit-texte); font: 600 11.5px var(--police-chiffres); }
+.entete-ecran h1 { white-space: nowrap; }
+.entete-ecran-sous-titre { color: var(--encre-2); font-size: 12.5px; }
+.entete-ecran-espace { flex: 1; }
+.entete-ecran-message { font-size: 12.5px; color: var(--encre-2); }
+.entete-ecran-message-ok { color: var(--ok-f); font-weight: 600; }
+.entete-ecran-message-alerte { color: var(--erreur-f); font-weight: 600; }
+
+/* Touches de fonction F1–F12 (maquette MES) */
+.mes-touches { flex: none; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; padding: 3px; background: var(--nuit-2); border-top: 1px solid var(--noir); }
+.mes-touche { min-width: 0; height: 36px; padding: 0 6px; border: 1px solid var(--nuit-f); background: var(--entete-tableau); color: var(--encre); display: flex; align-items: center; gap: 6px; text-align: left; overflow: hidden; }
+.mes-touche:disabled { opacity: 1; background: var(--nuit-3); color: var(--touche-inactive-texte); }
+.mes-touche-principale { background: var(--action); color: var(--blanc); }
+.mes-touche-principale:disabled { background: var(--action-inactive); color: var(--action-inactive-texte); }
+.mes-touche-nom { flex: none; font: 600 11px var(--police-chiffres); color: var(--encre-2); }
+.mes-touche:disabled .mes-touche-nom { color: var(--touche-inactive-texte); }
+.mes-touche-principale .mes-touche-nom { color: var(--action-touche-texte); }
+.mes-touche-libelle { font-size: 11.5px; line-height: 1.1; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+/* Sous 1280 px, seules les touches définies restent, à leur taille (T-164, A12) ; les 12 à partir de 1280 px. */
+@media (max-width: 1279.98px) {
+  .mes-touches { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 170px); justify-content: start; }
+  .mes-touche-vide { display: none; }
+}
+
+/* Barre d'état : voyants utiles au poste, puis « Verrouiller » et la version, toujours visibles (audit §6, problème 2). */
+.barre-etat { flex: none; display: flex; align-items: stretch; min-height: 26px; background: var(--onglets); border-top: 1px solid var(--onglets-trait); font-size: 11.5px; white-space: nowrap; }
+.barre-etat-voyants { flex: 1 1 auto; min-width: 0; display: flex; align-items: stretch; overflow-x: auto; scrollbar-width: thin; }
+.barre-etat-fin { flex: none; display: flex; align-items: stretch; border-left: 1px solid var(--trait); }
+.barre-etat-voyants > *, .barre-etat-fin > * { flex: none; display: flex; align-items: center; gap: 6px; padding: 0 12px; border-right: 1px solid var(--trait); }
+.barre-etat-fin > :last-child { border-right: 0; }
+.etat-alerte { color: var(--erreur-f); font-weight: 600; }
+.barre-etat-version { font-family: var(--police-chiffres); color: var(--encre-2); }
+.barre-etat button { height: 22px; margin: 2px 0; padding: 0 10px; border: 1px solid var(--trait-f); background: var(--blanc); font-size: 11.5px; font-weight: 600; }
+
+.bandeau-serveur { position: sticky; top: 0; z-index: 10; padding: 8px 14px; background: var(--erreur); color: var(--blanc); font-weight: 700; text-align: center; }
+
+/* ── Composants communs ───────────────────────────────────────────────── */
+.bouton-principal { display: inline-flex; align-items: center; gap: 10px; height: 36px; padding: 0 16px; border: 1px solid var(--action-f); background: var(--action); color: var(--blanc); font-weight: 600; white-space: nowrap; }
+.bouton-principal:hover:not(:disabled) { background: var(--action-f); }
+.touche-f8 { padding: 1px 5px; background: var(--action-f); font: 600 11px var(--police-chiffres); }
+.bouton-principal:has(.touche-f8) { padding-left: 8px; }
+.bouton-secondaire { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border: 1px solid var(--trait-f); background: var(--blanc); color: var(--encre); font-weight: 600; white-space: nowrap; }
+.bouton-secondaire:hover:not(:disabled) { background: var(--survol); }
+.bouton-lien { height: auto; padding: 0; border: 0; background: transparent; color: var(--action); text-decoration: underline; }
+.lien-discret { color: var(--encre-3); font-size: 12px; }
+.erreur { margin: 8px 0; padding: 7px 10px; border: 1px solid var(--erreur); border-left-width: 4px; background: var(--erreur-c); color: var(--erreur-f); font-weight: 600; }
+.message-ok { margin: 8px 0; padding: 7px 10px; border: 1px solid var(--ok); border-left-width: 4px; background: var(--ok-c); color: var(--ok-f); font-weight: 600; }
+.etiquette, .champ label, .champ > .etiquette { font: 600 11.5px var(--police-titre); letter-spacing: .05em; text-transform: uppercase; color: var(--encre-2); }
+
+/* Panneau à bandeau gris (tout bloc de contenu) */
+.panneau, .carte-parametre, .chronologie, .validation-pin { margin: 0 0 12px; padding: 0 12px 12px; background: var(--panneau); border: 1px solid var(--trait); }
+.panneau > h2:first-child, .carte-parametre > h2:first-child, .chronologie > h3:first-child {
+  display: flex; align-items: center; gap: 8px; height: 30px; margin: 0 -12px 12px; padding: 0 10px; background: var(--bandeau); border-bottom: 1px solid var(--trait);
+  font: 600 12px var(--police-titre); letter-spacing: .06em; text-transform: uppercase; color: var(--encre-titre);
+}
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.colonnes { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+.colonnes > * { flex: 1 1 320px; min-width: 0; }
+
+/* Écrans plein cadre (connexion, appairage, poste non appairé, mise en service) */
+.page-centree, .page-connexion, .page-appairage, .page-formulaire { width: min(100% - 32px, 640px); margin: 32px auto; padding: 0 16px 16px; background: var(--panneau); border: 1px solid var(--trait); text-align: center; }
+.page-appairage, .page-formulaire { text-align: left; width: min(100% - 32px, 760px); }
+.page-centree > h1:first-child, .page-connexion > h1:first-child, .page-appairage > h1:first-child, .page-formulaire > h1:first-child {
+  margin: 0 -16px 16px; padding: 10px 16px; background: var(--nuit); color: var(--blanc); font-size: 17px; text-align: left; letter-spacing: .02em;
+}
+.nom-choisi { font: 600 22px var(--police-titre); margin: 8px 0; }
+.grille-noms { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 6px; }
+.bouton-nom { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-height: 64px; padding: 8px 12px; border: 1px solid var(--trait-f); border-left: 4px solid transparent; background: var(--blanc); color: var(--encre); font-size: 15px; font-weight: 600; text-align: left; }
+.bouton-nom span { font-size: 12px; font-weight: 400; color: var(--encre-2); }
+.bouton-nom:hover, .bouton-nom-choisi { border-left-color: var(--action); background: var(--selection); }
+.validation-pin-validee { border-color: var(--ok); background: var(--ok-c); animation: validation-flash 0.7s ease-out; }
+.validation-pin-validee legend { color: var(--ok-f); }
+.validation-ok { display: flex; align-items: center; gap: 12px; margin: 4px 0 10px; }
+.validation-ok-coche { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--ok); color: #fff; font-size: 26px; font-weight: 700; animation: validation-coche 0.45s cubic-bezier(0.2, 1.6, 0.4, 1); }
+.validation-ok-texte { display: flex; flex-direction: column; flex: 1; color: var(--ok-f); }
+.validation-ok-texte strong { font-size: 18px; }
+.validation-ok-refaire { min-height: 36px; padding: 4px 10px; border: 1px solid var(--ok-f); background: transparent; color: var(--ok-f); font-size: 13px; }
+.bouton-nom.bouton-nom-valide, .bouton-nom.bouton-nom-valide:disabled { border-color: var(--ok); border-left-color: var(--ok-f); background: var(--ok); color: #fff; opacity: 1; }
+.bouton-nom-valide span { color: #fff; }
+@keyframes validation-coche { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes validation-flash { from { box-shadow: 0 0 0 4px var(--ok); } to { box-shadow: 0 0 0 0 transparent; } }
+@media (prefers-reduced-motion: reduce) { .validation-pin-validee, .validation-ok-coche { animation: none; } }
+
+/* Pavé numérique (PIN) */
+.pave { display: inline-block; margin: 12px auto; outline: none; }
+.pave:focus-visible { outline: 2px solid var(--action); outline-offset: 6px; }
+.pave-points { display: flex; justify-content: center; gap: 12px; margin-bottom: 12px; }
+.pave-point { width: 16px; height: 16px; border: 2px solid var(--trait-f); }
+.pave-point-plein { background: var(--nuit); }
+.pave-grille { display: grid; grid-template-columns: repeat(3, 5rem); gap: 4px; }
+.pave-touche { min-width: 44px; min-height: 60px; border: 1px solid var(--trait-f); background: var(--blanc); color: var(--encre); font: 600 22px var(--police-chiffres); }
+.pave-touche:hover { background: var(--survol); }
+.pave-touche-secondaire { font: 600 12px var(--police); }
+.pave-touche-principale { border-color: var(--action-f); background: var(--action); color: var(--blanc); font: 600 13px var(--police); }
+
+/* Accueil : tuiles des écrans, comme le synoptique de la maquette */
+.grille-cartes { display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: 8px; }
+.carte-ecran { display: flex; flex-direction: column; gap: 4px; min-height: 64px; padding: 8px 10px; border: 1px solid var(--trait-m); border-top: 4px solid var(--trait-f); background: var(--blanc); color: var(--encre); text-decoration: none; font: 600 15px var(--police-titre); }
+.carte-ecran:hover { border-top-color: var(--action); background: var(--selection); }
+.carte-ecran-code { font: 600 11px var(--police-chiffres); color: var(--encre-2); }
+
+/* Quitter (coin haut droit, collé au bord) et écran « fermé sur ce poste » : valeurs de la maquette MES. */
+.mes-quitter { flex: none; display: flex; align-items: center; gap: 7px; margin: 0; padding: 0 16px 0 14px; border: 0; border-left: 1px solid var(--noir); background: #C62828; color: var(--blanc); font: 700 13px var(--police-titre); letter-spacing: .08em; text-transform: uppercase; }
+.mes-quitter .mes-icone { width: 18px; height: 18px; stroke-width: 2.4; }
+.mes-quitter:hover { background: #E03131; }
+.mes-quitter:active { background: #A61E1E; }
+.mes-quitter:focus-visible { outline: 2px solid var(--blanc); outline-offset: -4px; }
+@media (max-width: 700px) { .mes-quitter span { display: none; } .mes-quitter { padding-left: 12px; } }
+.quitter-corps { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; min-width: 0; color: var(--encre); white-space: normal; }
+.quitter-corps p { margin: 0; }
+.quitter-fiche { display: grid; gap: 6px; margin: 0; }
+.quitter-fiche div { display: flex; justify-content: space-between; gap: 12px; padding: 6px 8px; background: var(--panneau); border: 1px solid var(--trait-c); }
+.quitter-fiche dt { color: var(--encre-2); }
+.quitter-fiche dd { margin: 0; font-weight: 600; }

@@ -1,0 +1,59 @@
+/* Jetons visuels de l'application, repris de la maquette « Huilerie Arrachid MES » (décision T-86),
+   aujourd'hui prototype/arrachid-mes.html : gris industriels, bleu d'action, chiffres en IBM Plex Mono,
+   titres en IBM Plex Sans Condensed. Les écrans n'écrivent aucune couleur en dur : ils prennent ces jetons. */
+@font-face { font-family: 'IBM Plex Sans'; src: url('../polices/ibm-plex-sans-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'IBM Plex Sans'; src: url('../polices/ibm-plex-sans-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'IBM Plex Sans'; src: url('../polices/ibm-plex-sans-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'IBM Plex Sans'; src: url('../polices/ibm-plex-sans-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'IBM Plex Sans Condensed'; src: url('../polices/ibm-plex-sans-condensed-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'IBM Plex Sans Condensed'; src: url('../polices/ibm-plex-sans-condensed-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'IBM Plex Sans Condensed'; src: url('../polices/ibm-plex-sans-condensed-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('../polices/ibm-plex-mono-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('../polices/ibm-plex-mono-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('../polices/ibm-plex-mono-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('../polices/ibm-plex-mono-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'IBM Plex Sans Arabic'; src: url('../polices/ibm-plex-sans-arabic-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+
+:root {
+  /* Surfaces */
+  --fond: #DFE1E2; --panneau: #F7F8F8; --blanc: #FFFFFF; --tete: #F2F3F3;
+  --bandeau: #D5D9DC; --entete-tableau: #E6E9EB; --survol: #EEF0F1;
+  --onglets: #C3C8CC; --onglet: #D9DDE0;
+  /* Traits */
+  --trait-c: #DDE1E3; --trait: #A3AAAF; --trait-m: #7B858C; --trait-f: #59636A;
+  /* Encres. --encre-3 un peu plus foncée que la maquette (#6A747B) : 4,5:1 au moins sur toutes les surfaces claires
+     où elle s'écrit, sélection comprise (Session 9, T-193). */
+  --encre: #1C2226; --encre-titre: #2A3136; --encre-2: #4A545B; --encre-3: #5E686F;
+  /* Barres sombres (haut, touches, afficheur) */
+  --nuit: #1B2226; --nuit-f: #11171A; --nuit-2: #2A3136; --nuit-3: #3A444A; --noir: #000000;
+  --nuit-texte: #DDE2E5; --nuit-texte-2: #8E9AA1; --nuit-texte-3: #AEB7BC; --afficheur: #14191C; --afficheur-chiffres: #E9F2D8;
+  /* Touches F sans action (texte lisible sur --nuit-3) et F8 en attente */
+  --touche-inactive-texte: #A7B1B6; --action-inactive: #3E5566; --action-inactive-texte: #C3D2DE; --action-touche-texte: #CFE0EE;
+  /* Barre des onglets et logo */
+  --onglets-trait: #8E979D; --onglet-trait: #A9B0B5; --onglet-encre: #3E474D;
+  --logo-or: #C9A54A; --logo-gris: #5E6A71;
+  /* Voile du tiroir, ombres, papier du ticket */
+  --voile: rgba(17, 23, 26, .45); --ombre: rgba(0, 0, 0, .18); --ombre-legere: rgba(0, 0, 0, .1); --papier: #F1F1EF;
+  /* Action et sélection */
+  --action: #1F5F8B; --action-f: #174A6D; --action-survol: #123E5C; --selection: #DCE7F0; --selection-f: #5D84A3;
+  /* États (-c : teinte claire de fond ; -texte : texte lisible sur cette teinte) */
+  --ok: #3FA34D; --ok-f: #2E7A39; --ok-c: #E3F1E5;
+  --alerte: #E8B931; --alerte-f: #B8901A; --alerte-c: #FBF1D2; --alerte-texte: #6E5409;
+  --erreur: #AE3E26; --erreur-f: #8A3B12; --erreur-c: #F6E3DD;
+  --violet: #5E4A86; --violet-c: #ECE7F4; --violet-t: #8C77B3;
+  --olive: #6F7A2A;
+  /* Couleur de chaque module (refonte, prototype/arrachid-mes.html) */
+  --g-tableau: #C9A54A; --g-reception: #2F8A7E; --g-laboratoire: #7A5BA6; --g-production: #C27427; --g-bureau: #1F5F8B; --g-administration: #6A747B;
+  /* Qualité de l'huile (cuves dessinées, jauges ; prototype/arrachid-mes.html, refonte Session 5) */
+  --q-extra-vierge: #7D8C2E; --q-vierge: #C2A23A; --q-lampante: #8A5A2B;
+  /* Cave à huile (CUV-01, d'après prototype/prototype-huilerie-v3.html) : haut clair du remplissage de chaque qualité,
+     huile dont l'acidité n'est pas sûre, tôle et reflets des cuves dessinées, sol hachuré du hall. */
+  --q-extra-vierge-c: #A6B455; --q-vierge-c: #DDC067; --q-lampante-c: #B07E4C; --q-attente: #5A7F92; --q-attente-c: #8FA8B5;
+  --cuve-corps: #DCE0E2; --cuve-ombre: rgba(0, 0, 0, .09); --cuve-reflet: rgba(255, 255, 255, .6); --cuve-etiquette: rgba(255, 255, 255, .78);
+  --cave-sol: #E9ECED; --cave-hachure: rgba(27, 34, 38, .14);
+  /* Polices */
+  --police: 'IBM Plex Sans', sans-serif;
+  --police-titre: 'IBM Plex Sans Condensed', 'IBM Plex Sans', sans-serif;
+  --police-chiffres: 'IBM Plex Mono', monospace;
+  --police-arabe: 'IBM Plex Sans Arabic', sans-serif;
+}

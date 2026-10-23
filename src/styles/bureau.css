@@ -1,0 +1,94 @@
+/* Module Bureau refait (prompt-ui-ux.md, Session 6) : Caisse, Décomptes (réceptions et comptes des apporteurs) et Prix,
+   au style de prototype/arrachid-mes.html. Panneaux, tableaux, champs, choix, étapes, chiffres, notes et tiroirs viennent
+   des composants partagés (composants.css) ; cette feuille ne garde que la mise en page propre à ces écrans. */
+.bureau-page { display: grid; gap: 12px; align-content: start; }
+
+/* Caisse : les chiffres de la session sur toute la largeur, puis les avances à gauche et les clôtures précédentes (le
+   tableau le plus large) à droite ; un panneau seul prend toute la ligne ; l'un sous l'autre sous 1280 px. */
+.bureau-colonnes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 12px; align-items: start; }
+.bureau-colonnes > :only-child { grid-column: 1 / -1; }
+@media (max-width: 1279.98px) { .bureau-colonnes { grid-template-columns: minmax(0, 1fr); } }
+.bureau-ouverture { max-width: 560px; }
+/* L'attendu du tiroir (afficheur) sur deux cases, ses chiffres jamais coupés. */
+.bureau-resume .mes-chiffre-afficheur { grid-column: span 2; }
+.bureau-resume .mes-chiffre-afficheur dd { white-space: nowrap; }
+
+.bureau-formulaire { display: grid; gap: 12px; min-width: 0; }
+.bureau-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+
+/* Outils en tête d'un panneau à tableau : recherche, choix de la campagne, puces de filtre sur toute la largeur. */
+.bureau-outils { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 12px; padding: 10px; border-bottom: 1px solid var(--trait-c); background: var(--panneau); }
+.bureau-outils .mes-puces { grid-column: 1 / -1; }
+.bureau-totaux { margin: 0; padding: 8px 10px; border-bottom: 1px solid var(--trait-c); font-size: 13px; }
+.bureau-aide { margin: 0; padding: 8px 10px; font-size: 12px; color: var(--encre-2); }
+
+/* Relevé d'un compte (sept colonnes) : ses lignes restent sur une ligne, le tableau défile au besoin. */
+.bureau-releve td { white-space: nowrap; }
+
+/* Avances à déduire d'un décompte : une case par avance. */
+.bureau-cases { display: grid; gap: 6px; }
+
+/* Prix : la saisie et l'aperçu du montant côte à côte quand la place le permet. */
+.bureau-prix { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: end; }
+
+/* Session 7 : Ventes (Comptoir, Clients, Contrats, Factures), Documents et fiches papier du Rattrapage. */
+/* Comptoir : une case par article (nom, prix unitaire du serveur, quantité) ; aucun montant calculé ici (A13). */
+.bureau-articles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.bureau-article { padding: 8px 10px; border: 1px solid var(--trait-m); background: var(--blanc); }
+.bureau-quantite-huile { display: grid; gap: 6px; }
+/* Huile : choix kg | L collé à droite de la saisie, même hauteur, bordure commune. */
+.bureau-unite { display: flex; flex: 0 0 auto; }
+.bureau-unite button { height: 34px; min-width: 38px; padding: 0 9px; border: 1px solid var(--trait-m); border-left: 0; background: var(--tete); color: var(--encre-2); font: 600 13px var(--police-titre); cursor: pointer; }
+.bureau-unite button:hover:not(:disabled):not([aria-checked='true']) { background: var(--survol); }
+.bureau-unite button[aria-checked='true'] { border-color: var(--action); background: var(--action); color: var(--blanc); }
+.bureau-unite button:disabled { color: var(--encre-3); cursor: not-allowed; opacity: .55; }
+.bureau-unite button:focus-visible { outline: 2px solid var(--action); outline-offset: -2px; position: relative; }
+[data-densite='tactile'] .bureau-unite button { height: 44px; min-width: 46px; }
+/* Litres convertis (et montant HT de la ligne) sous la saisie. */
+.bureau-conversion { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; margin: 0; padding: 5px 8px; border-left: 3px solid var(--action); background: var(--selection); color: var(--encre); font: 12.5px/18px var(--police-chiffres); font-variant-numeric: tabular-nums; }
+.bureau-conversion strong { font-weight: 600; color: var(--action-f); }
+.bureau-cuve-huile { display: grid; gap: 6px; }
+/* Huile sans cuve de détail disponible : carte d'explication à la place de la liste vide. */
+.bureau-cuve-absente { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 1px solid var(--alerte-f); border-left: 4px solid var(--alerte); background: var(--alerte-c); color: var(--encre); animation: bureau-apparition .22s ease-out; }
+.bureau-cuve-absente-icone { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--blanc); color: var(--alerte-texte); box-shadow: 0 0 0 1px var(--alerte-f); }
+.bureau-cuve-absente-texte { display: grid; gap: 4px; justify-items: start; min-width: 0; }
+.bureau-cuve-absente-texte strong { font: 600 14px/20px var(--police-titre); color: var(--alerte-texte); }
+.bureau-cuve-absente-texte p { margin: 0; font-size: 13px; line-height: 18px; color: var(--encre-2); }
+.bureau-cuve-absente-texte .bouton-secondaire { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; }
+.bureau-article-sans-cuve { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 12px; color: var(--alerte-texte); }
+.bureau-article-sans-cuve .mes-icone { width: 14px; height: 14px; }
+@keyframes bureau-apparition { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .bureau-cuve-absente { animation: none; } }
+.bureau-recherche { display: grid; gap: 6px; }
+.bureau-choisi { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--trait-m); background: var(--selection); }
+.bureau-choisi .mes-etiquette { flex-basis: 100%; }
+/* Sources d'une facture : cases groupées par sorte. */
+.bureau-groupe { display: grid; gap: 4px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.bureau-ligne-etat { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
+/* Documents : en-tête du document, aperçu du PDF imprimé. */
+.bureau-entete-document p { margin: 0; }
+.bureau-discret { font-size: 12px; color: var(--encre-2); }
+.bureau-ligne-echec td:first-child { box-shadow: inset 3px 0 0 var(--erreur); }
+.bureau-pages { padding: 8px 10px; border-top: 1px solid var(--trait-c); }
+/* Corrections : le numéro et « Chercher » sur une ligne ; pesées et bacs côte à côte. */
+.bureau-recherche-ligne { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px 12px; }
+.bureau-recherche-ligne .mes-champ { flex: 1 1 220px; max-width: 320px; }
+.bureau-recherche-ligne > button { margin-top: 20px; }
+.bureau-colonnes-egales { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+/* Déclarée après la règle des 1 280 px, elle l'emportait : pesées et bacs restaient côte à côte à 768 px (Session 9). */
+@media (max-width: 1023.98px) { .bureau-colonnes-egales { grid-template-columns: minmax(0, 1fr); } }
+
+/* EM-05 : caisse conforme à la réalité. Numéro et banque d'un chèque côte à côte ; récapitulatif avant de payer (montant
+   en chiffres puis en lettres, puis qui, quoi, comment) ; raisons proposées d'un apport ou d'une sortie de fonds. */
+.bureau-references { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px 12px; }
+.bureau-recapitulatif { display: grid; gap: 8px; padding: 10px; border: 1px solid var(--trait-m); background: var(--blanc); }
+.bureau-lettres { margin: 0; font-size: 14px; font-weight: 600; color: var(--encre-titre); }
+.bureau-recapitulatif-lignes { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 12px; margin: 0; font-size: 13px; }
+.bureau-recapitulatif-lignes > div { display: contents; }
+.bureau-recapitulatif-lignes dt { color: var(--encre-2); }
+.bureau-recapitulatif-lignes dd { margin: 0; font-weight: 600; }
+.bureau-raisons { display: flex; flex-wrap: wrap; gap: 6px; }
+.bureau-cheques { display: grid; gap: 6px; margin: 0; padding: 0; border: 0; min-width: 0; }
+/* Saisie gardée montée (PIN compris) sous le récapitulatif ; `hidden` doit gagner sur `display: grid`. */
+.bureau-saisie { display: grid; gap: 12px; min-width: 0; }
+.bureau-saisie[hidden] { display: none; }

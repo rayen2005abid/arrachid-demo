@@ -1,0 +1,14 @@
+/* Module Laboratoire refait (prompt-ui-ux.md, Session 5) : Analyses d'olives (LAB-01 et LAB-03 réunis) et
+   Échantillons, au style de prototype/arrachid-mes.html. Panneaux, tableaux, champs, puces et tiroir viennent des
+   composants partagés (composants.css) ; les cibles de 44 px viennent de la densité tactile de la coquille.
+   Cette feuille ne garde que ce qui est propre à ces écrans. Classe que des tests sélectionnent : aucune. */
+.labo-page { display: grid; gap: 12px; align-content: start; }
+.labo-etape { display: grid; justify-items: start; gap: 3px; }
+.labo-reference { font: 700 14px var(--police-chiffres); letter-spacing: .02em; }
+.labo-formulaire { display: grid; gap: 12px; min-width: 0; }
+/* Les quatre résultats en deux colonnes : l'ordre de saisie (Entrée) suit les lignes. */
+.labo-resultats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
+.labo-consequence { margin: 0; font-size: 12.5px; color: var(--encre-2); }
+/* La file du labo défile seule : l'en-tête des colonnes reste visible, la page et la saisie à droite ne bougent pas. */
+.labo-file .mes-tableau { max-height: calc(100vh - 300px); min-height: 160px; overflow-y: auto; overscroll-behavior: contain; }
+.labo-file .mes-tableau th { position: sticky; top: 0; z-index: 1; }

@@ -1,0 +1,127 @@
+/* Tableau de bord (TDB-01), d'après l'onglet « Tableau de bord » de prototype/arrachid-mes (7).html : barre d'accès
+   rapides, calendrier du mois, situation du jour, agenda de la semaine. Couleurs : jetons de jetons.css seulement. */
+.tdb { display: grid; gap: 10px; align-content: start; }
+
+/* ── Barre d'accès rapides ── */
+.tdb-barre { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px 0; padding: 8px 6px 10px; background: var(--tete); border: 1px solid var(--trait); }
+.tdb-groupe { --t1: #7C8CF8; --t2: #4B57D1; position: relative; display: flex; flex-direction: column; gap: 5px; padding: 0 10px; border-right: 1px solid var(--trait-c); }
+.tdb-groupe:last-child { border-right: 0; }
+/* Teintes des tuiles : la couleur de chaque module du MES, éclaircie (maquette, .gc-t-*). */
+.tdb-g-reception { --t1: #2FC2AE; --t2: #14907F; }
+.tdb-g-laboratoire { --t1: #A585E6; --t2: #7350BE; }
+.tdb-g-production { --t1: #FFA54D; --t2: #DB6D12; }
+.tdb-g-ventes { --t1: #4DA3F0; --t2: #1F6DC0; }
+.tdb-g-argent { --t1: #49CC6E; --t2: #1E9446; }
+.tdb-g-suivi { --t1: #7C8CF8; --t2: #4B57D1; }
+.tdb-t-prix { --t1: #FFC23D; --t2: #E08A00; }
+.tdb-groupe.vide { justify-content: center; }
+
+.tdb-groupe-nom { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 2px 6px 2px 3px; border: 1px solid transparent; border-radius: 4px; background: none; color: var(--encre-3); font: 600 10.5px var(--police-titre); letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; cursor: pointer; }
+.tdb-groupe-nom::before { content: ''; width: 10px; height: 3px; border-radius: 2px; background: var(--t2); }
+.tdb-groupe-nom .mes-icone { width: 13px; height: 13px; transition: transform .15s; }
+.tdb-groupe-nom:hover, .tdb-groupe.ouvert .tdb-groupe-nom { color: var(--t2); background: color-mix(in srgb, var(--t1) 12%, transparent); }
+.tdb-groupe-nom:hover { border-color: color-mix(in srgb, var(--t2) 40%, transparent); }
+.tdb-groupe.ouvert .tdb-groupe-nom .mes-icone { transform: rotate(180deg); }
+.tdb-groupe.vide .tdb-groupe-nom { align-self: center; min-height: 40px; padding: 4px 10px 4px 8px; border-color: color-mix(in srgb, var(--t2) 45%, transparent); background: color-mix(in srgb, var(--t1) 10%, transparent); font-size: 12px; color: var(--t2); }
+.tdb-plus { font: 600 10.5px var(--police-chiffres); letter-spacing: 0; color: var(--encre-3); }
+.tdb-pastille { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #E5352B; color: #fff; font: 600 10.5px/18px var(--police-chiffres); letter-spacing: 0; text-align: center; }
+
+.tdb-boutons, .tdb-menu-boutons { display: flex; gap: 4px; }
+.tdb-bouton { position: relative; min-width: 78px; min-height: 74px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; padding: 8px 9px 7px; background: var(--blanc); border: 1px solid #C9CFD3; border-radius: 4px; box-shadow: 0 1px 0 rgba(17, 23, 26, .06); color: var(--encre); text-decoration: none; transition: border-color .12s, background-color .12s, box-shadow .12s; }
+.tdb-bouton:hover { border-color: var(--t2); background: #FBFCFD; box-shadow: 0 2px 6px rgba(17, 23, 26, .10); }
+.tdb-bouton:active { transform: translateY(1px); box-shadow: none; }
+.tdb-tuile { position: relative; width: 38px; height: 38px; display: grid; place-items: center; flex: none; border-radius: 9px; background: linear-gradient(160deg, var(--t1) 0%, var(--t2) 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), inset 0 -1px 0 rgba(0, 0, 0, .12), 0 1px 2px rgba(17, 23, 26, .18); }
+.tdb-tuile .mes-icone { width: 21px; height: 21px; color: #fff; stroke-width: 2.1; filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .18)); }
+.tdb-pastille-n { position: absolute; top: -7px; right: -9px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 10px; border: 2px solid var(--blanc); box-sizing: border-box; background: #E5352B; color: #fff; font: 600 11px/15px var(--police-chiffres); text-align: center; }
+.tdb-pastille-n.alerte { background: #F2B416; color: #3D2E00; }
+.tdb-bouton-libelle { font: 600 12.5px/1.15 var(--police-titre); letter-spacing: .01em; text-align: center; white-space: nowrap; }
+
+.tdb-menu { position: absolute; top: calc(100% + 6px); left: 0; z-index: 30; padding: 10px 12px; background: var(--blanc); border: 1px solid var(--trait-m); border-top: 3px solid var(--t2); box-shadow: 0 12px 30px rgba(17, 23, 26, .24); }
+.tdb-groupe:nth-last-child(-n+3) .tdb-menu { left: auto; right: 0; }
+.tdb-menu-titre { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 8px; font: 600 11.5px var(--police-titre); letter-spacing: .08em; text-transform: uppercase; color: var(--encre-2); white-space: nowrap; }
+.tdb-fermer, .tdb-nav, .tdb-epingle { display: grid; place-items: center; border: 0; background: none; color: var(--encre-3); }
+.tdb-fermer { width: 26px; height: 26px; }
+.tdb-epingle { border-radius: 4px; }
+.tdb-fermer:hover, .tdb-nav:hover, .tdb-epingle:hover { background: var(--survol); color: var(--encre); }
+.tdb-item { position: relative; }
+.tdb-epingle { position: absolute; top: 3px; left: 3px; z-index: 2; width: 24px; height: 24px; }
+.tdb-epingle .mes-icone { width: 15px; height: 15px; }
+.tdb-epingle[aria-pressed='true'] { color: var(--t2); background: color-mix(in srgb, var(--t1) 16%, white); }
+.tdb-menu-aide { display: flex; align-items: center; gap: 5px; margin: 8px 0 0; font-size: 11.5px; color: var(--encre-3); white-space: nowrap; }
+.tdb-menu-aide .mes-icone { width: 13px; height: 13px; }
+.tdb-bouton:focus-visible, .tdb-groupe-nom:focus-visible, .tdb-epingle:focus-visible, .tdb-nav:focus-visible { outline: 2px solid var(--action); outline-offset: 2px; }
+
+/* ── Corps : calendrier et situation à gauche, agenda à droite ── */
+.tdb-corps { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 10px; align-items: start; }
+.tdb-gauche { display: grid; gap: 10px; align-content: start; min-width: 0; }
+
+.tdb-calendrier { padding: 8px 8px 6px; background: var(--blanc); border: 1px solid var(--trait); }
+.tdb-calendrier header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.tdb-calendrier header strong { font: 600 14px var(--police-titre); letter-spacing: .02em; }
+.tdb-nav { min-width: 28px; height: 26px; border: 1px solid var(--trait); background: var(--panneau); }
+.tdb-nav .mes-icone { width: 15px; height: 15px; }
+.tdb-calendrier table { width: 100%; border-collapse: collapse; text-align: center; }
+.tdb-calendrier th { padding: 2px 0 4px; border-bottom: 1px solid var(--trait); font: 600 12px var(--police-titre); text-transform: uppercase; color: var(--encre-2); }
+.tdb-calendrier td { padding: 0; }
+.tdb-calendrier td button { width: 100%; padding: 5px 0; border: 0; background: none; font: 13px var(--police-chiffres); color: var(--encre); }
+.tdb-calendrier td button:hover { background: var(--selection); }
+.tdb-calendrier td.hors button { color: var(--trait); }
+.tdb-calendrier td.semaine button { color: var(--erreur); }
+.tdb-calendrier td.auj button span { padding: 0 4px; outline: 2px solid var(--erreur); outline-offset: 1px; }
+.tdb-legende { margin: 4px 0 0; font-size: 11px; color: var(--encre-3); }
+
+/* ── Situation du jour ── */
+.tdb-lignes, .tdb-production { margin: 0; padding: 0; list-style: none; }
+.tdb-lignes a { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 5px 10px; border-bottom: 1px dotted var(--trait); color: var(--encre); text-decoration: none; font-size: 13px; }
+.tdb-lignes a:hover, .tdb-production a:hover { background: var(--survol); }
+.tdb-lignes b { font: 600 13px var(--police-chiffres); white-space: nowrap; }
+.tdb-lignes b.alerte { color: var(--erreur); }
+.tdb-production a { display: block; padding: 6px 10px; border-bottom: 1px solid var(--trait-c); color: var(--encre); text-decoration: none; font-size: 12.5px; }
+.tdb-production i { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--trait-m); }
+.tdb-production a.marche i { background: var(--ok); }
+.tdb-production small { display: block; color: var(--encre-3); font-size: 11px; }
+.tdb-vide { margin: 0; padding: 12px 10px; font-size: 12.5px; color: var(--encre-2); }
+
+/* ── Agenda ── */
+.tdb-agenda { display: flex; flex-direction: column; min-width: 0; min-height: 0; background: var(--blanc); border: 1px solid var(--trait-m); }
+.tdb-agenda-barre { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--trait); background: var(--tete); }
+.tdb-semaine { padding: 4px 16px; background: var(--alerte); color: var(--encre); font: 600 14px var(--police-titre); letter-spacing: .03em; }
+.tdb-aujourdhui { height: 26px; padding: 0 10px; border: 1px solid var(--trait); background: var(--panneau); font: 600 12px var(--police-titre); }
+.tdb-aujourdhui:hover { background: var(--survol); }
+.tdb-aide { margin-left: auto; font-size: 12px; color: var(--encre-3); }
+.tdb-agenda-tete, .tdb-grille { display: grid; grid-template-columns: 64px repeat(7, minmax(0, 1fr)); }
+.tdb-agenda-tete { padding-right: 15px; background: var(--entete-tableau); border-bottom: 1px solid var(--trait); font: 600 12px var(--police-titre); }
+.tdb-agenda-tete div { padding: 5px 2px; text-align: center; border-left: 1px solid var(--trait); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tdb-agenda-tete div:first-child { border-left: 0; text-align: left; padding-left: 8px; }
+.tdb-agenda-tete .auj { background: var(--alerte-c); color: var(--alerte-texte); }
+.tdb-agenda-corps { max-height: 560px; overflow-y: scroll; }
+.tdb-heures div { padding: 5px 0 0 8px; border-bottom: 1px solid var(--trait-c); border-right: 1px solid var(--trait); background: var(--tete); font: 11px var(--police-chiffres); color: var(--encre-3); }
+.tdb-heures .plein { font-weight: 600; color: var(--encre); }
+.tdb-jour { position: relative; border-left: 1px solid var(--trait-c); }
+.tdb-case { border-bottom: 1px solid var(--trait-c); }
+.tdb-case.alt { background: var(--panneau); }
+.tdb-case:hover { background: var(--selection); }
+.tdb-rdv { position: absolute; left: 2px; right: 2px; z-index: 2; overflow: hidden; padding: 2px 5px; border: 1px solid var(--c); border-left-width: 4px; background: var(--c-fond); color: var(--encre); font: 11.5px/1.25 var(--police); text-align: left; }
+.tdb-rdv b { display: block; font-size: 10.5px; font-weight: 400; opacity: .8; }
+.tdb-rdv:hover { filter: brightness(.96); }
+.tdb-rdv-olives { --c: var(--erreur); --c-fond: var(--erreur-c); }
+.tdb-rdv-ventes { --c: var(--action); --c-fond: var(--selection); }
+.tdb-rdv-production { --c: var(--ok-f); --c-fond: var(--ok-c); }
+.tdb-rdv-administration { --c: var(--alerte-f); --c-fond: var(--alerte-c); }
+.tdb-maintenant { position: absolute; left: 0; right: 0; z-index: 3; height: 2px; background: var(--erreur); pointer-events: none; }
+
+/* Tiroirs de l'agenda */
+.tdb-fiche { display: grid; gap: 6px; margin: 0 0 12px; }
+.tdb-fiche div { display: flex; justify-content: space-between; gap: 12px; padding: 6px 8px; background: var(--panneau); border: 1px solid var(--trait-c); }
+.tdb-fiche dt { font: 600 11px var(--police-titre); letter-spacing: .06em; text-transform: uppercase; color: var(--encre-3); }
+.tdb-fiche dd { margin: 0; text-align: right; }
+.tdb-memo { margin: 0 0 12px; font-size: 12.5px; color: var(--encre-2); }
+
+@media (max-width: 1279.98px) {
+  .tdb-corps { grid-template-columns: minmax(0, 1fr); }
+  .tdb-groupe { flex: 1 1 100%; border-right: 0; padding: 0 4px; }
+  .tdb-boutons, .tdb-menu-boutons { flex-wrap: wrap; }
+  .tdb-bouton { flex: 1 1 78px; }
+  .tdb-menu, .tdb-groupe:nth-last-child(-n+3) .tdb-menu { left: 0; right: 0; }
+  .tdb-menu-aide { white-space: normal; }
+}

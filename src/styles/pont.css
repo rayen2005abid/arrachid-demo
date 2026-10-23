@@ -1,0 +1,122 @@
+/* Module Réception refait (prompt-ui-ux.md, Session 4) : Pont-bascule, Bacs, Apporteurs, Chargements, au style de
+   prototype/arrachid-mes.html. Les panneaux, champs, tableaux et tiroirs viennent des composants partagés
+   (composants.css) ; cette feuille ne garde que ce qui est propre à ces écrans (reception.css, supprimée en
+   Session 9, n'y laisse que .rec-choisi). Classes que des tests sélectionnent : .rec-choisi, .rec-carte,
+   .rec-ticket-numero. */
+
+/* Pont-bascule : file à gauche, travail à droite ; l'un sous l'autre sur un écran étroit */
+.pont { display: grid; grid-template-columns: minmax(0, 330px) minmax(0, 1fr); gap: 12px; align-items: start; }
+@media (max-width: 899.98px) { .pont { grid-template-columns: minmax(0, 1fr); } }
+.pont-travail { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.pont-formulaire { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+/* L'afficheur (dernier champ au clavier) se montre en tête : le poids reste au-dessus du pli à 1366×768. */
+.pont-formulaire > .pont-afficheur { order: -1; }
+.pont-grille { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
+.pont-plein { grid-column: 1 / -1; }
+@media (max-width: 599.98px) { .pont-grille { grid-template-columns: minmax(0, 1fr); } }
+.pont-ligne { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+/* File des remorques en cartes ; l'avancement vient du statut de la réception */
+/* La file défile seule : la page et le formulaire de pesée ne bougent pas quand la file s'allonge. */
+.pont-file { display: grid; gap: 6px; max-height: calc(100vh - 260px); min-height: 160px; overflow-y: auto; padding-right: 2px; overscroll-behavior: contain; }
+.pont-remorque { display: grid; gap: 3px; width: 100%; min-width: 0; padding: 8px 10px; border: 1px solid var(--trait-m); border-left: 5px solid var(--action); background: var(--blanc); color: var(--encre); text-align: left; }
+.pont-remorque-versee { border-left-color: var(--alerte-f); }
+.pont-remorque:hover { background: var(--survol); }
+.pont-remorque[aria-current='true'] { background: var(--selection); outline: 2px solid var(--action); outline-offset: -2px; }
+.pont-remorque-tete { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.pont-remorque-tete .mes-pastille { margin-left: auto; }
+.pont-remorque-numero { font: 600 13px var(--police-chiffres); }
+.pont-discret { font-size: 12px; color: var(--encre-3); }
+.pont-remorque-ligne { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.pont-remorque-nom { flex: 1; min-width: 0; overflow: hidden; font: 600 15px var(--police-titre); text-overflow: ellipsis; white-space: nowrap; }
+.pont-remorque-brut { flex: none; font-size: 12.5px; color: var(--encre-2); }
+.pont-remorque-detail { overflow: hidden; font-size: 12px; color: var(--encre-2); text-overflow: ellipsis; white-space: nowrap; }
+.pont-points { display: flex; gap: 4px; margin-top: 3px; }
+.pont-points span { flex: 1; height: 4px; background: var(--trait-c); }
+.pont-points .pont-point-faite { background: var(--ok); }
+.pont-points .pont-point-actuelle { background: var(--action); }
+
+/* Modes F2, F3, F4 */
+.pont-modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+.pont-mode { display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 0; min-height: 42px; padding: 0 8px; border: 1px solid var(--trait-f); background: var(--onglet); color: var(--encre); font: 600 14px var(--police-titre); }
+.pont-mode:hover { background: var(--survol); }
+.pont-mode-touche { padding: 1px 5px; background: var(--nuit-2); color: var(--blanc); font: 600 11px var(--police-chiffres); }
+.pont-mode[aria-pressed='true'] { border-color: var(--nuit-f); background: var(--nuit-2); color: var(--blanc); }
+.pont-mode[aria-pressed='true'] .pont-mode-touche { background: var(--action); }
+
+/* Apporteur choisi, suggestions de la recherche */
+.pont-suggestions { display: grid; margin: 0; padding: 0; list-style: none; border: 1px solid var(--trait); background: var(--blanc); }
+/* Liste vide : l'attribut hidden doit gagner sur display: grid (sinon un trait reste sous le champ). */
+.pont-suggestions[hidden] { display: none; }
+.pont-suggestion { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 32px; padding: 0 10px; border: 0; border-bottom: 1px solid var(--trait-c); background: transparent; color: var(--encre); text-align: left; }
+.pont-suggestion[aria-selected='true'] { background: var(--selection); outline: 2px solid var(--action); outline-offset: -2px; }
+
+/* Régime : trois choix, touches 1, 2, 3 */
+.pont-regimes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.pont-regime { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 0 6px; border: 1px solid var(--trait-m); background: var(--blanc); color: var(--encre); font-weight: 600; }
+.pont-regime:hover { background: var(--survol); }
+.pont-regime[aria-checked='true'] { border: 2px solid var(--action); background: var(--selection); color: var(--action-f); }
+.pont-regime .mes-icone { color: var(--encre-2); }
+.pont-regime[aria-checked='true'] .mes-icone { color: var(--action); }
+.pont-touche { padding: 0 4px; border: 1px solid currentColor; font: 10.5px var(--police-chiffres); opacity: .75; }
+
+/* Afficheur de la bascule : le poids manuel se tape dedans */
+.pont-afficheur { display: grid; gap: 4px; padding: 10px 16px 12px; border: 1px solid var(--nuit-f); background: var(--afficheur); color: var(--nuit-texte-2); }
+.pont-afficheur-tete { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; font: 600 12px var(--police-titre); letter-spacing: .08em; text-transform: uppercase; }
+.pont-afficheur-source { flex: 1; font: 400 11.5px var(--police); letter-spacing: 0; text-align: right; text-transform: none; }
+.pont-afficheur-ligne { display: flex; align-items: baseline; gap: 12px; }
+.pont-afficheur-ligne label { font: 600 14px var(--police-titre); letter-spacing: .08em; }
+.pont-afficheur-ligne input { flex: 1; width: 100%; min-width: 0; padding: 0; border: 0; background: transparent; color: var(--afficheur-chiffres); caret-color: var(--afficheur-chiffres); font: 600 clamp(36px, 5vw, 60px)/1.05 var(--police-chiffres); text-align: right; }
+.pont-afficheur-ligne input::placeholder { color: var(--nuit-3); }
+.pont-afficheur-ligne input:focus-visible { outline: 1px dashed var(--nuit-texte-2); outline-offset: 4px; }
+.pont-afficheur-unite { font: 600 20px var(--police-chiffres); }
+
+/* Zone des bacs : libres en vert, occupés en ambre, choisis en bleu */
+.pont-bacs { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 5px; }
+.pont-bac { display: grid; align-content: start; gap: 2px; min-width: 0; min-height: 58px; padding: 5px 7px; border: 1px solid var(--ok); background: var(--ok-c); color: var(--encre); text-align: left; }
+.pont-bac:hover:not(:disabled) { background: var(--survol); }
+.pont-bac-numero { font: 600 18px var(--police-chiffres); }
+.pont-bac small { overflow: hidden; font-size: 10.5px; line-height: 1.2; color: var(--encre-2); text-overflow: ellipsis; white-space: nowrap; }
+.pont-bac:disabled { opacity: 1; border-color: var(--alerte-f); background: var(--alerte-c); color: var(--encre); }
+.pont-bac[aria-pressed='true'] { border: 2px solid var(--action); background: var(--selection); }
+
+/* Tare : cartes de choix (plusieurs remorques pour un CIN) */
+.pont .rec-cartes { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
+.pont .rec-carte { display: grid; gap: 3px; min-height: 0; padding: 8px 10px; border: 1px solid var(--trait-m); border-left: 5px solid var(--alerte-f); background: var(--blanc); color: var(--encre); text-align: left; }
+.pont .rec-carte:focus, .pont .rec-carte:hover { border-left-color: var(--action); background: var(--selection); }
+.pont .rec-carte strong { font-size: 16px; }
+
+/* Ticket émis : résultat à gauche, aperçu du ticket à droite */
+.pont-resultat { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 12px; align-items: start; }
+@media (max-width: 1099.98px) { .pont-resultat { grid-template-columns: minmax(0, 1fr); } }
+.pont .rec-ticket-numero { margin: 0; font: 700 30px var(--police-titre); letter-spacing: .02em; }
+.pont-resume { display: grid; margin: 0; border: 1px solid var(--trait-c); background: var(--blanc); }
+.pont-resume > div { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; min-height: 36px; padding: 5px 10px; border-bottom: 1px solid var(--trait-c); }
+.pont-resume > div:last-child { border-bottom: 0; }
+.pont-resume dt { color: var(--encre-2); }
+.pont-resume dd { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; margin: 0; }
+.pont-alerte { color: var(--erreur-f); font-weight: 600; }
+.pont-apercu { display: block; width: 100%; max-width: 300px; margin: 0 auto; border: 1px solid var(--trait); background: var(--blanc); box-shadow: 0 6px 18px var(--ombre-legere); }
+
+/* Bacs (BAC-01) : une carte par bac */
+.bacs-cartes { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.bac-carte { display: grid; align-content: start; gap: 4px; min-width: 0; min-height: 112px; padding: 10px; border: 1px solid var(--ok); border-top: 4px solid var(--ok); background: var(--blanc); }
+.bac-carte-occupe { border-color: var(--alerte-f); background: var(--alerte-c); }
+.bac-carte p { margin: 0; }
+.bac-carte-tete { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.bac-carte-numero { font: 600 22px var(--police-chiffres); }
+.bac-carte .bouton-secondaire { justify-self: start; margin-top: 4px; }
+
+/* Apporteurs (APP-01) et Chargements (CHG-01) */
+.reception-recherche { display: grid; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--trait-c); background: var(--tete); }
+.reception-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.reception-suggestions { margin: 0; padding-left: 18px; }
+
+/* Apporteur choisi de ChampApporteur hors du pont-bascule (avance de la caisse, fiche papier PAP-01) : depuis la
+   Session 7 plus aucun écran ne charge reception.css, qui le dessinait jusque-là. */
+.rec-choisi { display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 4px 4px 4px 10px; border: 1px solid var(--selection-f); background: var(--selection); }
+.rec-choisi > span { flex: 1; min-width: 0; }
+
+/* EM-10 : la pesée refusée reste lisible dans l'afficheur sombre. */
+.pont-afficheur input[aria-invalid='true'] { outline: 2px solid var(--erreur); outline-offset: 3px; }
+.pont-erreur-poids { margin: 4px 0 0; padding: 8px 10px; color: var(--erreur-f); background: var(--erreur-c); font-weight: 600; }
